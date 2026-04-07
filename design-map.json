@@ -1,0 +1,947 @@
+<!-- Crib Community Design System & UI Kit -->
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crib UI Kit: Ethereal Glow Variant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#E67E22",
+              "primary-glow": "#F39C12",
+              "background-light": "#f8f7f6",
+              "background-dark": "#0A0E14", // Deep midnight blue/black
+              "surface-dark": "#151922",
+              "gold-border": "#8C6A43",
+              "accent-amber": "#F39C12",
+              "text-high": "#FFFFFF",
+              "text-medium": "#D1D1D1",
+              "text-low": "#8E8E8E",
+            },
+            fontFamily: {
+              "display": ["Playfair Display", "serif"],
+              "sans": ["Outfit", "sans-serif"],
+            },
+            backgroundImage: {
+               'star-pattern': "url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5980?q=80&w=2072&auto=format&fit=crop')",
+               'button-gradient': "linear-gradient(135deg, #E67E22 0%, #F1C40F 100%)",
+            },
+            boxShadow: {
+                'glow': '0 0 20px rgba(230, 126, 34, 0.4)',
+                'card': '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0E14; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+        .glass-panel {
+            background: rgba(21, 25, 34, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-panel-hover:hover {
+            background: rgba(21, 25, 34, 0.6);
+            border-color: rgba(230, 126, 34, 0.5);
+            box-shadow: 0 0 25px rgba(230, 126, 34, 0.15), 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(230, 126, 34, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-sans text-gray-800 dark:text-text-medium min-h-screen relative selection:bg-primary selection:text-white antialiased transition-colors duration-300">
+<div class="fixed inset-0 z-0 pointer-events-none opacity-30 dark:opacity-50 bg-star-pattern bg-cover bg-center"></div>
+<div class="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-background-dark/90 to-background-dark"></div>
+<div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="fixed bottom-0 right-1/4 w-[400px] h-[400px] bg-accent-amber/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-20">
+<header class="mb-20 text-center md:text-left border-b border-white/10 pb-8 relative">
+<div class="absolute -top-10 -left-10 w-24 h-24 bg-primary/20 blur-2xl rounded-full"></div>
+<h1 class="font-display text-5xl md:text-[64px] text-gray-900 dark:text-text-high mb-4 relative z-10">Crib Community <span class="text-primary italic font-light">Design System</span></h1>
+<p class="text-xl text-gray-600 dark:text-text-medium max-w-2xl font-light">
+                The <span class="text-primary font-medium">Ethereal Glow</span> variant. A visual guide combining deep midnight aesthetics with warm, fire-lit accents.
+            </p>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+<div class="md:col-span-4 space-y-16">
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Typography
+                    </h2>
+<div class="space-y-10 relative">
+<div class="absolute -left-4 top-0 bottom-0 w-[1px] bg-gradient-to-b from-white/20 via-white/5 to-transparent"></div>
+<div class="pl-6 relative">
+<span class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-primary box-shadow-glow"></span>
+<span class="text-xs text-text-low block mb-2 font-mono uppercase">H1 • Playfair Display • 64px</span>
+<h1 class="font-display text-5xl md:text-6xl text-gray-900 dark:text-text-high leading-[1.1]">
+                                Ethereal Nights
+                            </h1>
+</div>
+<div class="pl-6 relative">
+<span class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-white/20"></span>
+<span class="text-xs text-text-low block mb-2 font-mono uppercase">H2 • Playfair Display • 48px</span>
+<h2 class="font-display text-4xl md:text-5xl text-gray-900 dark:text-text-high">
+                                Shared Stories
+                            </h2>
+</div>
+<div class="pl-6 relative">
+<span class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-white/20"></span>
+<span class="text-xs text-text-low block mb-2 font-mono uppercase">H3 • Playfair Display • 32px</span>
+<h3 class="font-display text-3xl text-gray-900 dark:text-text-high">
+                                Community First
+                            </h3>
+</div>
+<div class="pl-6 relative">
+<span class="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-white/20"></span>
+<span class="text-xs text-text-low block mb-2 font-mono uppercase">Body • Outfit • 18px</span>
+<p class="text-base md:text-lg text-gray-600 dark:text-text-medium leading-relaxed font-light">
+                                Connect with fellow travelers in spaces designed for serendipity. Our hostels are more than beds; they are glowing hearths in the night.
+                            </p>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Color Palette
+                    </h2>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-3 group">
+<div class="h-24 w-full rounded-xl bg-gradient-to-br from-[#E67E22] to-[#F39C12] shadow-glow ring-1 ring-white/10 relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+</div>
+<div class="flex justify-between items-center text-xs px-1">
+<span class="text-text-high font-bold">Fire Orange</span>
+<span class="text-text-low font-mono">#E67E22</span>
+</div>
+</div>
+<div class="space-y-3 group">
+<div class="h-24 w-full rounded-xl bg-[#0A0E14] shadow-lg ring-1 ring-white/10 relative overflow-hidden">
+<div class="absolute inset-0 bg-star-pattern opacity-50 mix-blend-overlay"></div>
+</div>
+<div class="flex justify-between items-center text-xs px-1">
+<span class="text-text-high font-bold">Midnight</span>
+<span class="text-text-low font-mono">#0A0E14</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-3">
+<div class="space-y-2">
+<div class="h-12 w-full rounded bg-gold-border ring-1 ring-white/5"></div>
+<span class="text-[10px] text-text-low block text-center font-mono">#8C6A43</span>
+</div>
+<div class="space-y-2">
+<div class="h-12 w-full rounded bg-surface-dark ring-1 ring-white/5"></div>
+<span class="text-[10px] text-text-low block text-center font-mono">#151922</span>
+</div>
+<div class="space-y-2">
+<div class="h-12 w-full rounded bg-text-medium ring-1 ring-white/5"></div>
+<span class="text-[10px] text-text-low block text-center font-mono">#D1D1D1</span>
+</div>
+<div class="space-y-2">
+<div class="h-12 w-full rounded bg-text-low ring-1 ring-white/5"></div>
+<span class="text-[10px] text-text-low block text-center font-mono">#8E8E8E</span>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Iconography
+                    </h2>
+<div class="flex gap-4 text-gold-border dark:text-accent-amber justify-between">
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center hover:text-primary hover:border-primary/50 transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">local_fire_department</span>
+</div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center hover:text-primary hover:border-primary/50 transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">nights_stay</span>
+</div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center hover:text-primary hover:border-primary/50 transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">music_note</span>
+</div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center hover:text-primary hover:border-primary/50 transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">explore</span>
+</div>
+</div>
+</section>
+</div>
+<div class="md:col-span-8 space-y-16">
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Interface Components
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start glass-panel p-8 rounded-2xl">
+<div class="space-y-8">
+<div>
+<h4 class="text-xs text-text-low mb-3 font-mono uppercase tracking-wider">Primary Action</h4>
+<button class="bg-button-gradient text-white px-8 py-3.5 rounded-full font-bold tracking-wide transition-all shadow-glow hover:shadow-[0_0_30px_rgba(230,126,34,0.6)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-glow flex items-center justify-center gap-2 w-full md:w-auto">
+                                    BOOK NOW
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div>
+<h4 class="text-xs text-text-low mb-3 font-mono uppercase tracking-wider">Secondary Action</h4>
+<button class="bg-transparent border border-gold-border/50 text-text-high hover:bg-white/5 hover:border-primary hover:text-primary px-8 py-3 rounded-full font-medium tracking-wide transition-all uppercase text-sm w-full md:w-auto">
+                                    Explore More
+                                </button>
+</div>
+<div>
+<h4 class="text-xs text-text-low mb-3 font-mono uppercase tracking-wider">Hyperlink</h4>
+<a class="inline-flex items-center text-primary hover:text-accent-amber transition-colors uppercase text-xs tracking-[0.2em] font-bold group border-b border-primary/30 hover:border-primary pb-1" href="#">
+                                    View Itinerary
+                                    <span class="material-symbols-outlined text-sm ml-2 transform group-hover:translate-x-1 transition-transform">east</span>
+</a>
+</div>
+</div>
+<div class="space-y-8">
+<div>
+<h4 class="text-xs text-text-low mb-3 font-mono uppercase tracking-wider">Search Input</h4>
+<div class="relative group">
+<span class="absolute left-4 top-3.5 text-text-low group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-surface-dark/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white placeholder-text-low focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none" placeholder="Search destinations..." type="text"/>
+</div>
+</div>
+<div>
+<h4 class="text-xs text-text-low mb-3 font-mono uppercase tracking-wider">Tags &amp; Categories</h4>
+<div class="flex flex-wrap gap-3">
+<span class="bg-primary/20 text-primary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-primary/30 hover:bg-primary/30 cursor-default transition-colors">Community</span>
+<span class="bg-surface-dark text-text-medium px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white/10 hover:border-white/30 cursor-default transition-colors">Night Life</span>
+<span class="bg-surface-dark text-text-medium px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white/10 hover:border-white/30 cursor-default transition-colors">Nature</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Card Components
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="md:col-span-2 group cursor-pointer">
+<div class="glass-panel glass-panel-hover p-5 rounded-2xl flex flex-col md:flex-row gap-8 transition-all duration-500">
+<div class="w-full md:w-2/5 h-56 rounded-xl overflow-hidden relative shadow-lg">
+<img alt="Gathering around fire" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqmBn9T47s2y9_H-J31W83glpCJJgPQLjuzz8tN36514sqW4tDv1epmEMYx8HwEWYB1GYPCtPq_ZEBGpeOy8JlCGw6l7NMAbSBN8auxG4n2L-9goWO5JbJuzgGNWS0t_6QaO4L0GTvVUGSFSFFsswhzw3wQdKKcAEKtQCeM3ROS5rgx-wrQ2k6GN_zEDBS8_D1fEvs9FPF6kGQ7M-2QU4nlCk-0tIhbgvrBWECZ6_YTRbxN9pjphld0RreH6yQ9h1QDejnmjLuld8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute top-3 left-3">
+<span class="bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider border border-white/10">Featured</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center pr-4">
+<div class="flex items-center gap-3 mb-4 text-xs">
+<span class="text-primary font-bold uppercase tracking-wider">Stories</span>
+<span class="w-1 h-1 rounded-full bg-text-low"></span>
+<span class="text-text-low font-mono">APR 05, 2024</span>
+</div>
+<h3 class="font-display text-2xl md:text-3xl text-gray-900 dark:text-text-high mb-3 group-hover:text-primary transition-colors leading-tight">Midnight Tales: The Magic of Connection</h3>
+<p class="text-gray-600 dark:text-text-medium line-clamp-2 mb-6 text-sm font-light">Discover heartwarming stories and unforgettable experiences shared by our travelers under the starlit sky.</p>
+<div class="mt-auto">
+<span class="text-white text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-2 group-hover:gap-3 transition-all">
+                                            Read Article <span class="material-symbols-outlined text-sm text-primary">arrow_right_alt</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel glass-panel-hover p-8 rounded-2xl transition-all duration-300 group flex flex-col h-full relative overflow-hidden">
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
+<div class="w-14 h-14 rounded-xl border border-white/10 flex items-center justify-center text-primary mb-8 relative z-10 bg-surface-dark shadow-inner group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-2xl">event_note</span>
+</div>
+<h3 class="font-display text-2xl text-gray-900 dark:text-text-high mb-3">Host a Workshop</h3>
+<p class="text-gray-600 dark:text-text-medium text-sm leading-relaxed mb-8 flex-grow font-light">
+                                Share your craft in our cozy, sheltered spaces. Perfect for intimate groups seeking inspiration.
+                            </p>
+<button class="w-full py-3.5 rounded border border-white/20 text-xs font-bold uppercase tracking-[0.15em] hover:bg-white hover:text-background-dark transition-all text-text-high group-hover:border-white">
+                                Book Venue
+                            </button>
+</div>
+<div class="glass-panel glass-panel-hover p-8 rounded-2xl transition-all duration-300 group flex flex-col h-full relative overflow-hidden">
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-accent-amber/10 rounded-full blur-2xl group-hover:bg-accent-amber/20 transition-colors"></div>
+<div class="w-14 h-14 rounded-xl border border-white/10 flex items-center justify-center text-primary mb-8 relative z-10 bg-surface-dark shadow-inner group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-2xl">volunteer_activism</span>
+</div>
+<h3 class="font-display text-2xl text-gray-900 dark:text-text-high mb-3">Join The Crew</h3>
+<p class="text-gray-600 dark:text-text-medium text-sm leading-relaxed mb-8 flex-grow font-light">
+                                Become a part of our motivated team. We are looking for enthusiastic souls to make magic happen.
+                            </p>
+<button class="w-full py-3.5 rounded border border-white/20 text-xs font-bold uppercase tracking-[0.15em] hover:bg-white hover:text-background-dark transition-all text-text-high group-hover:border-white">
+                                View Openings
+                            </button>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Navigation
+                    </h2>
+<div class="rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAAKEjRHU6sTmRx-xKrl0m6ADwWqcxNf0MwzlFOFA5QrdKJgpQOWme5K4Z6qUb9CkpytQZrUG9jw4c65O2tgA0LLK_oFfnExb0p_o-_v1g-MAr1qwSsd7zrJ7rpn19dHRg5Nl-WlPztdEaM8Fh83GPyDo8lFrdDdvMyPLtQ6HqaZY7keeIoc_njJE1BI4Zdzxj2f7JDyTSZsSBLVF3dRqGoFAEEH3NNVA0Hbmd0Q5QsT8OL7niU_oVZrgVjZL8VWA119IkyCqOmLxc');">
+<div class="absolute inset-0 bg-background-dark/80 backdrop-blur-sm"></div>
+</div>
+<div class="relative z-10 px-8 py-6">
+<nav class="flex items-center justify-between glass-panel px-6 py-4 rounded-full border border-white/5">
+<div class="flex items-center gap-2">
+<div class="text-white font-display text-2xl font-bold italic tracking-tighter">Crib<span class="text-primary not-italic text-4xl leading-none">.</span></div>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-xs font-bold uppercase tracking-widest text-white/80 hover:text-primary transition-colors" href="#">Stay</a>
+<a class="text-xs font-bold uppercase tracking-widest text-white/80 hover:text-primary transition-colors" href="#">Experience</a>
+<a class="text-xs font-bold uppercase tracking-widest text-white/80 hover:text-primary transition-colors" href="#">Community</a>
+</div>
+<button class="bg-primary hover:bg-primary-hover text-white px-6 py-2.5 rounded-full text-[10px] font-bold tracking-[0.15em] uppercase shadow-glow transition-all">
+                                    Reserve
+                                </button>
+</nav>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-8 flex items-center gap-3">
+<span class="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent"></span> Footer Area
+                    </h2>
+<footer class="glass-panel p-10 rounded-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full pointer-events-none"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-10 relative z-10">
+<div class="col-span-1 md:col-span-1">
+<div class="text-white font-display text-3xl font-bold italic tracking-tighter mb-6">Crib<span class="text-primary not-italic">.</span></div>
+<p class="text-xs text-text-medium leading-relaxed mb-6 font-light">
+                                    Where wanderers find their way home. A boutique hostel designed for deep connections.
+                                </p>
+<div class="flex gap-4">
+<a class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-background-dark transition-all" href="#"><i class="material-symbols-outlined text-sm">public</i></a>
+<a class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-background-dark transition-all" href="#"><i class="material-symbols-outlined text-sm">photo_camera</i></a>
+</div>
+</div>
+<div>
+<h4 class="text-primary font-bold uppercase text-[10px] tracking-[0.2em] mb-6">Explore</h4>
+<ul class="space-y-3 text-sm text-text-medium font-light">
+<li><a class="hover:text-white transition-colors flex items-center gap-2 group" href="#"><span class="w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span> Locations</a></li>
+<li><a class="hover:text-white transition-colors flex items-center gap-2 group" href="#"><span class="w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span> About Us</a></li>
+<li><a class="hover:text-white transition-colors flex items-center gap-2 group" href="#"><span class="w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span> Community</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-primary font-bold uppercase text-[10px] tracking-[0.2em] mb-6">Connect</h4>
+<ul class="space-y-3 text-sm text-text-medium font-light">
+<li><a class="hover:text-white transition-colors flex items-center gap-2 group" href="#"><span class="w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span> Events</a></li>
+<li><a class="hover:text-white transition-colors flex items-center gap-2 group" href="#"><span class="w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span> Contact</a></li>
+<li><a class="hover:text-white transition-colors flex items-center gap-2 group" href="#"><span class="w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span> FAQ</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-primary font-bold uppercase text-[10px] tracking-[0.2em] mb-6">Stay Updated</h4>
+<div class="flex flex-col gap-3">
+<div class="relative">
+<input class="w-full bg-black/30 border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-primary placeholder-white/30" placeholder="Email address" type="email"/>
+<button class="absolute right-2 top-2 bottom-2 bg-white/10 hover:bg-primary text-white rounded px-3 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+<span class="text-[10px] text-text-low">Join our glowing community newsletter.</span>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-text-low gap-4">
+<span>© 2024 Crib Community. All rights reserved.</span>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</section>
+</div>
+</div>
+</div>
+<div class="fixed top-20 right-20 w-1 h-1 bg-primary rounded-full blur-[1px] animate-pulse pointer-events-none opacity-60"></div>
+<div class="fixed bottom-40 left-10 w-2 h-2 bg-accent-amber rounded-full blur-[2px] animate-pulse pointer-events-none opacity-40"></div>
+<div class="fixed top-1/2 left-1/4 w-1 h-1 bg-white rounded-full blur-[1px] pointer-events-none opacity-30"></div>
+<div class="fixed bottom-1/3 right-1/3 w-1.5 h-1.5 bg-white rounded-full blur-[0.5px] pointer-events-none opacity-20"></div>
+
+</body></html>
+
+<!-- hero.png -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crib Community - Locations: The Floating Storyteller</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D46B3C", // Warm terracotta orange
+                        "primary-hover": "#b85a2f",
+                        "background-light": "#FDF8F3",
+                        "background-dark": "#050508", // Deep, almost black
+                        "surface-dark": "rgba(255, 255, 255, 0.03)",
+                        "accent-gold": "#E6B062",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                    },
+                    fontFamily: {
+                        serif: ["Playfair Display", "serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'starry-night': "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2940&auto=format&fit=crop')",
+                    },
+                    boxShadow: {
+                        'ethereal': '0 0 80px -20px rgba(212, 107, 60, 0.3)',
+                    }
+                },
+            },
+        };
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #050508;
+            color: #ffffff;
+        }.glass-panel {
+            background: rgba(20, 20, 25, 0.3);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }.ethereal-glow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(212, 107, 60, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(60px);
+        }.card-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="bg-background-dark text-white font-sans min-h-screen selection:bg-primary selection:text-white">
+<nav class="fixed w-full z-50 transition-all duration-300 bg-background-dark/80 backdrop-blur-md border-b border-white/5">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="flex justify-between items-center h-24">
+<div class="flex-shrink-0 flex items-center">
+<a class="text-2xl font-serif font-bold text-white flex items-center gap-3 tracking-wide" href="#">
+<img alt="Logo" class="h-8 w-8 invert opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAi0ohiHWhODbmn6SmYyNTq_bC15HWc9Uz6-vd_0duaLLWCjzYHCQ_hZF9b8DJH5GndVOBtsy9pFG8RiUpzGqghUeHtLTqf8cq_8uByITqwJ13h60pIHstqw87i1ThtZGZ2ZOV6izMHTviTSYCBZ1FSHYACdLjYh4_xoOaHwQeITmVscbHWOePG8YYl37KNYxwL72nRBSlbSJt18H4pqYskKJ9WNRGkufsRzWk5_Ugrn6iIA3VGIpAfuoxSkfBHHv4vvqvLEZdeao"/>
+                        Crib Community
+                    </a>
+</div>
+<div class="hidden md:flex items-center space-x-10">
+<a class="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide" href="#">Locations</a>
+<a class="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide" href="#">Our Story</a>
+<a class="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide" href="#">Journal</a>
+<a class="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide" href="#">Contact</a>
+<a class="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-full text-sm font-semibold transition-all shadow-[0_0_20px_rgba(212,107,60,0.4)] hover:shadow-[0_0_30px_rgba(212,107,60,0.6)]" href="#">
+                        Book Now
+                    </a>
+</div>
+<div class="md:hidden flex items-center">
+<button class="text-white hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="relative pt-40 pb-32 px-6 sm:px-8 max-w-[1600px] mx-auto">
+<div class="text-center mb-32 relative z-10">
+<span class="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-accent-gold text-xs font-medium tracking-[0.2em] uppercase mb-6 backdrop-blur-sm">
+                Destinations
+            </span>
+<h1 class="text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-6 tracking-tight leading-tight">
+                The Floating<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-primary to-accent-gold opacity-90 italic">Storyteller</span>
+</h1>
+<p class="mt-8 max-w-2xl mx-auto text-lg text-gray-400 font-light leading-relaxed">
+                Immersive sanctuaries designed for connection. Hovering between reality and dreams.
+            </p>
+</div>
+<div class="flex flex-col gap-[96px]">
+<article class="relative group min-h-[80vh] w-full flex items-center justify-center card-reveal ethereal-glow">
+<div class="absolute inset-0 rounded-[32px] overflow-hidden z-0">
+<img alt="Bali Jungle Hideaway" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHq1HdXhOtFBojOwLfBGodpGWfITNMmfeXfSkk8vsxDo-Jbs7cB_eX8GUaVIUUBkYZsLCGdR7qz1u6JW3-QnAP7t4vd_BsXLu6DbQh3zvo9r1c9J5H5IVvNpa5xUIuzoLj5afeSHoTvl-l_6wbHdRPjDp5Uu2GvUDn-5Ywj_vG9R0fuAa1unbCUBBk3heS1Qq6kfEdIlI5svHIpb0nMHXLvkUT68nnJOra_8wLetr6wtWXK1YziR6CTewXCKqtNKrkWbBzBNLsgeA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent opacity-90"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
+</div>
+<div class="relative z-10 w-full max-w-7xl mx-auto px-4 lg:px-12 flex items-end h-full pb-16 lg:pb-24">
+<div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out border-l-4 border-l-primary">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-xs font-bold uppercase tracking-widest text-accent-gold">Indonesia</span>
+<div class="h-px w-12 bg-white/20"></div>
+<div class="flex items-center gap-1 text-accent-gold text-sm">
+<span class="material-symbols-outlined text-base filled">star</span>
+<span class="text-white font-medium ml-1">4.9</span>
+</div>
+</div>
+<h2 class="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">
+                            Bali Jungle Hideaway
+                        </h2>
+<p class="text-gray-300 text-lg font-light leading-relaxed mb-8 border-l border-white/10 pl-6">
+                            Nestled deep within the Ubud rainforest. Wake up to the symphony of waterfalls and silver-leaf monkeys playing in the canopy. A spiritual retreat for the modern soul seeking reconnection.
+                        </p>
+<div class="flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-white/10">
+<div>
+<span class="block text-xs text-gray-400 uppercase tracking-wider mb-1">Starting from</span>
+<span class="text-3xl font-serif text-white">$24<span class="text-sm font-sans text-gray-400 ml-1 font-light">/ night</span></span>
+</div>
+<a class="group/btn flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-primary hover:text-white transition-all duration-300" href="#">
+                                Explore Property
+                                <span class="material-symbols-outlined group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<article class="relative group min-h-[80vh] w-full flex items-center justify-center card-reveal delay-100 ethereal-glow">
+<div class="absolute inset-0 rounded-[32px] overflow-hidden z-0">
+<img alt="Alpine Star Lodge" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXr3fuspGGlOnCvLhDpISi_VeIrEIb0CXQlgd2gqw6ksWKTDS9sFTjWbIzVh7XWdmw5nGS3hoxyiFCBzkDcyjWYAqTe5Kp1NvpI5tS-bCB-Mkt1KMr3ZE3_zaMlCyvhF7Et0j8EMpaBW17A19JveqFHQtJhGc9WSXfsdBN3Fd9KlSr3QP3s6uR3wFm87r1THv78a25X3v630yQRGktbUrJbXMwG_BqBIRLht60e_yEaGLh0bZciahNsftZkOcZ2-MdCNw36GwYyCY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent opacity-90"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
+</div>
+<div class="relative z-10 w-full max-w-7xl mx-auto px-4 lg:px-12 flex items-end justify-end h-full pb-16 lg:pb-24">
+<div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out border-r-4 border-r-primary text-right">
+<div class="flex items-center justify-end gap-4 mb-6">
+<div class="flex items-center gap-1 text-accent-gold text-sm">
+<span class="text-white font-medium mr-1">4.7</span>
+<span class="material-symbols-outlined text-base filled">star</span>
+</div>
+<div class="h-px w-12 bg-white/20"></div>
+<span class="text-xs font-bold uppercase tracking-widest text-accent-gold">Switzerland</span>
+</div>
+<h2 class="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">
+                            Alpine Star Lodge
+                        </h2>
+<p class="text-gray-300 text-lg font-light leading-relaxed mb-8 border-r border-white/10 pr-6 ml-auto">
+                            High in the Swiss Alps, our lodge offers unparalleled views of the cosmos. Perfect for winter sports enthusiasts and stargazers alike who crave the silence of the snow.
+                        </p>
+<div class="flex flex-wrap flex-row-reverse items-center justify-between gap-6 pt-6 border-t border-white/10">
+<div class="text-right">
+<span class="block text-xs text-gray-400 uppercase tracking-wider mb-1">Starting from</span>
+<span class="text-3xl font-serif text-white">$45<span class="text-sm font-sans text-gray-400 ml-1 font-light">/ night</span></span>
+</div>
+<a class="group/btn flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-primary hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined group-hover/btn:-translate-x-1 transition-transform rotate-180">arrow_forward</span>
+                                Explore Property
+                            </a>
+</div>
+</div>
+</div>
+</article>
+<article class="relative group min-h-[80vh] w-full flex items-center justify-center card-reveal delay-200 ethereal-glow">
+<div class="absolute inset-0 rounded-[32px] overflow-hidden z-0">
+<img alt="Desert Mirage Oasis" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXTYI6xEhYcHyT4wWROqn7nXsEPjCtBHsR3zu0OwnI8VkzU11_Pm9GyhdyRqc5FZpcKUejZ9vrOhV5K2kTQQXvhqFomhaZg8UgTl6lmv9ENf1DJsTF5NB-s2KoInFUED5Bz3BqRh8vZcOL4nfP77iS8HQaOdCnbQ6I4n45DFGdBQ10RxKHzLBOlKzGtd8O6AYf4KztvCKXgtnsbeW1-FEpMFOfCCESk9bcisTrwlTgtrwTN-PHGXfSBSMP2LiUUFWyeerzLt7jIec"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent opacity-90"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
+</div>
+<div class="relative z-10 w-full max-w-7xl mx-auto px-4 lg:px-12 flex items-end h-full pb-16 lg:pb-24">
+<div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out border-l-4 border-l-primary">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-xs font-bold uppercase tracking-widest text-accent-gold">Morocco</span>
+<div class="h-px w-12 bg-white/20"></div>
+<div class="flex items-center gap-1 text-accent-gold text-sm">
+<span class="material-symbols-outlined text-base filled">star</span>
+<span class="text-white font-medium ml-1">5.0</span>
+</div>
+</div>
+<h2 class="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">
+                            Desert Mirage Oasis
+                        </h2>
+<p class="text-gray-300 text-lg font-light leading-relaxed mb-8 border-l border-white/10 pl-6">
+                            Experience the timeless magic of the Sahara. Sleep in luxury tents under a blanket of unpolluted stars, enjoy traditional music around the fire, and ride camels at dawn.
+                        </p>
+<div class="flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-white/10">
+<div>
+<span class="block text-xs text-gray-400 uppercase tracking-wider mb-1">Starting from</span>
+<span class="text-3xl font-serif text-white">$38<span class="text-sm font-sans text-gray-400 ml-1 font-light">/ night</span></span>
+</div>
+<a class="group/btn flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-primary hover:text-white transition-all duration-300" href="#">
+                                Explore Property
+                                <span class="material-symbols-outlined group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<section class="py-32 relative overflow-hidden bg-background-dark">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+<div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+<span class="material-symbols-outlined text-6xl text-primary/80 mb-8 animate-pulse">explore</span>
+<h2 class="text-5xl md:text-6xl font-serif text-white mb-8">Your story begins here.</h2>
+<p class="text-xl text-gray-400 font-light mb-12 max-w-2xl mx-auto leading-relaxed">
+                Join our community of travelers, artists, and explorers. Book your stay today and start making memories that last a lifetime.
+            </p>
+<div class="flex flex-col sm:flex-row justify-center gap-6">
+<button class="bg-primary hover:bg-primary-hover text-white px-10 py-4 rounded-full font-semibold transition-all transform hover:-translate-y-1 shadow-[0_0_30px_rgba(212,107,60,0.3)]">
+                    Find a Room
+                </button>
+<button class="bg-transparent border border-white/20 text-white hover:bg-white/5 px-10 py-4 rounded-full font-semibold transition-all">
+                    Contact Us
+                </button>
+</div>
+</div>
+</section>
+<footer class="bg-[#030304] pt-24 pb-12 border-t border-white/5 relative z-10">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20 mb-20">
+<div class="space-y-8">
+<a class="text-2xl font-serif font-bold text-white flex items-center gap-3" href="#">
+<img alt="Logo" class="h-8 w-8 invert opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHe1BdVCP8Mgm5zuDTGpCrlbDHlI2hhe70gFwiSlZOs9pFsX3ESN7RPS6HdAm_Qvkx56fublFeTpdL-hsgorA3EMRAMb8TcZoDmSehf8_RoVFFlIHaIykuSjhxVvp08zM8YUKNRsSfrimu-joYzf9Gt7rLAcSnyhgVI_N6eraM5tWrXBwrHnARkCKuUoX9xxg2HkWv1dtpikJJmbGkK0B9fssPe09XNdmrJcJQyYJCDeuGZO1aZaFokf21hZGhaedm3gWlKb9M8Mc"/>
+                         Crib Community
+                    </a>
+<p class="text-gray-500 font-light leading-relaxed">
+                        A boutique hostel for unforgettable connections. Where friends become family and every stay is a story waiting to be told.
+                    </p>
+<div class="flex space-x-6">
+<a class="text-gray-500 hover:text-primary transition-colors" href="#"><span class="sr-only">Instagram</span><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465C9.673 2.013 10.03 2 12.48 2h-.165zm-2.37 6.37a6.37 6.37 0 1012.74 0 6.37 6.37 0 00-12.74 0zm1.93 6.37a4.44 4.44 0 118.88 0 4.44 4.44 0 01-8.88 0zm6.9-3.88a1.44 1.44 0 100-2.88 1.44 1.44 0 000 2.88z" fill-rule="evenodd"></path></svg></a>
+<a class="text-gray-500 hover:text-primary transition-colors" href="#"><span class="sr-only">Facebook</span><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill-rule="evenodd"></path></svg></a>
+<a class="text-gray-500 hover:text-primary transition-colors" href="#"><span class="sr-only">Twitter</span><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg></a>
+</div>
+</div>
+<div>
+<h4 class="text-sm uppercase tracking-widest font-semibold text-white mb-8 border-b border-accent-gold/30 pb-2 inline-block">Explore</h4>
+<ul class="space-y-4 text-sm font-light">
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Destinations</a></li>
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Our Story</a></li>
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Community</a></li>
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Workshops</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-sm uppercase tracking-widest font-semibold text-white mb-8 border-b border-accent-gold/30 pb-2 inline-block">Support</h4>
+<ul class="space-y-4 text-sm font-light">
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">FAQ</a></li>
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Contact Us</a></li>
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-gray-400 hover:text-white transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-sm uppercase tracking-widest font-semibold text-white mb-8 border-b border-accent-gold/30 pb-2 inline-block">Subscribe</h4>
+<p class="text-gray-500 text-sm mb-6 font-light">Join our newsletter to stay up to date on features and releases.</p>
+<form class="flex flex-col gap-3">
+<input class="bg-white/5 border border-white/10 text-white rounded-lg px-4 py-3 focus:ring-1 focus:ring-accent-gold focus:border-accent-gold outline-none text-sm placeholder-gray-600 transition-all" placeholder="Enter your email" type="email"/>
+<button class="bg-white hover:bg-gray-100 text-black px-4 py-3 rounded-lg font-medium transition-colors text-sm" type="submit">
+                            Subscribe
+                        </button>
+</form>
+</div>
+</div>
+<div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-gray-600 uppercase tracking-wider">© 2024 Crib Community. All rights reserved.</p>
+<p class="text-xs text-gray-600 uppercase tracking-wider flex items-center gap-1">
+                    Made with <span class="material-symbols-outlined text-primary text-xs filled" style="font-size: 14px;">favorite</span> by Crib Team
+                </p>
+</div>
+</div>
+</footer>
+
+</body></html>
+
+<!-- Crib Community Locations Explorer -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crib Community - Properties: Horizon Slider Variant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D46B3C", // Warm terracotta orange from buttons
+                        "primary-hover": "#b85a2f",
+                        "background-light": "#FDF8F3", 
+                        "background-dark": "#0B0C15", // Deep starry night black/blue
+                        "surface-dark": "rgba(255, 255, 255, 0.05)",
+                        "accent-gold": "#E6B062", // Warm light gold text/accents
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                    },
+                    fontFamily: {
+                        serif: ["Playfair Display", "serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'starry-night': "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2940&auto=format&fit=crop')",
+                    },
+                    boxShadow: {
+                        'glow-amber': '0 0 25px rgba(212, 107, 60, 0.25)',
+                        'glow-amber-lg': '0 0 40px rgba(212, 107, 60, 0.35)',
+                        'glow-card': '0 0 80px -20px rgba(255, 255, 255, 0.1)',
+                    }
+                },
+            },
+        };
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            background: rgba(11, 12, 21, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-overlay-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top center, rgba(212, 107, 60, 0.15) 0%, rgba(11, 12, 21, 0) 60%);
+        }
+        .card-glow-bg {
+             background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 70%);
+             opacity: 0.6;
+             filter: blur(40px);
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0C15; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2c35; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D46B3C; 
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-gray-200 font-sans min-h-screen selection:bg-primary selection:text-white overflow-x-hidden">
+<nav class="fixed w-full z-50 transition-all duration-300 bg-background-dark/30 backdrop-blur-xl border-b border-white/5">
+<div class="max-w-[1920px] mx-auto px-6 lg:px-10">
+<div class="flex justify-between items-center h-24">
+<div class="flex-shrink-0 flex items-center">
+<a class="text-2xl font-serif font-bold text-white flex items-center gap-3 tracking-wide" href="#">
+<img alt="Logo" class="h-10 w-auto invert opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhLQvcIgynajSAsqFXTS2LO3YxgnnX1MgqFMt8qgkxUXfJQsTaCkoQhojqTSqCBN6vJweaVcON3MioIhP7Z2UlSnCbUjsF68P7wpi9OidBDBToi5tRra9UsxgjPdYdDgXlpnadY5UN_tTgESqNld5BbJ4Mg8KsAjJm7O2IuQJ8adcdbpFb1LhrrvpjIpCXADwD7Hn5BKP9rEJ6aCALszYDcZWlLF5yQJaJ5AGPjYPudIBl9KiPHXWSU5X7jwhmZiv7sVz9TpvlNOE"/>
+                        Crib Community
+                    </a>
+</div>
+<div class="hidden lg:flex items-center space-x-10">
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium tracking-wide uppercase" href="#">Locations</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium tracking-wide uppercase" href="#">Our Story</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium tracking-wide uppercase" href="#">Journal</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium tracking-wide uppercase" href="#">Contact</a>
+<a class="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-full text-sm font-semibold transition-all shadow-[0_4px_20px_rgba(212,107,60,0.4)] hover:shadow-[0_6px_25px_rgba(212,107,60,0.6)] uppercase tracking-wide" href="#">
+                        Book Now
+                    </a>
+</div>
+<div class="lg:hidden flex items-center">
+<button class="text-white hover:text-primary focus:outline-none">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="relative pt-24 min-h-screen flex flex-col overflow-hidden">
+<div class="absolute inset-0 z-0 pointer-events-none hero-gradient"></div>
+<div class="relative z-10 px-6 lg:px-10 max-w-[1920px] mx-auto w-full mt-8 mb-4">
+<div class="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
+<div>
+<span class="text-primary font-medium tracking-[0.2em] text-sm uppercase mb-2 block">Destinations</span>
+<h1 class="text-5xl lg:text-7xl font-serif text-white">The Horizon Slider</h1>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-white/20 hover:border-primary hover:bg-primary/10 flex items-center justify-center transition-all group">
+<span class="material-symbols-outlined text-white group-hover:text-primary transition-colors">west</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-white/20 hover:border-primary hover:bg-primary/10 flex items-center justify-center transition-all group">
+<span class="material-symbols-outlined text-white group-hover:text-primary transition-colors">east</span>
+</button>
+</div>
+</div>
+</div>
+<div class="relative z-10 w-full pl-6 lg:pl-10 pb-12 overflow-x-auto no-scrollbar flex items-center h-[75vh]">
+<div class="flex gap-8 lg:gap-12 min-w-max pr-6 lg:pr-10 items-center h-full">
+<div class="relative w-[85vw] md:w-[60vw] lg:w-[45vw] h-full group flex-shrink-0 transition-all duration-500">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] card-glow-bg rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+<div class="relative w-full h-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl transition-transform duration-700 hover:scale-[1.01]">
+<img alt="Purity Stays" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHq1HdXhOtFBojOwLfBGodpGWfITNMmfeXfSkk8vsxDo-Jbs7cB_eX8GUaVIUUBkYZsLCGdR7qz1u6JW3-QnAP7t4vd_BsXLu6DbQh3zvo9r1c9J5H5IVvNpa5xUIuzoLj5afeSHoTvl-l_6wbHdRPjDp5Uu2GvUDn-5Ywj_vG9R0fuAa1unbCUBBk3heS1Qq6kfEdIlI5svHIpb0nMHXLvkUT68nnJOra_8wLetr6wtWXK1YziR6CTewXCKqtNKrkWbBzBNLsgeA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 glass-overlay-card p-6 md:p-8 rounded-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h2 class="text-3xl md:text-5xl font-serif text-white mb-2">Purity Stays</h2>
+<div class="flex items-center gap-2 text-primary/90 text-sm tracking-widest uppercase mb-1">
+<span class="material-symbols-outlined text-base">location_on</span>
+                                    Auroville, India
+                                </div>
+</div>
+<div class="hidden md:block">
+<span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white text-xs border border-white/20 uppercase tracking-wider">
+                                    Top Rated
+                                </span>
+</div>
+</div>
+<p class="text-gray-300 font-light text-lg mb-6 line-clamp-2 opacity-90">
+                            Your Space. Blissful Serenity in a unique blend of spiritual peace.
+                        </p>
+<div class="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+<span class="text-white font-medium text-lg">$45 <span class="text-sm text-gray-400 font-light">/ night</span></span>
+<a class="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm uppercase tracking-wider font-medium group/link" href="#">
+                                View Property <span class="material-symbols-outlined text-lg group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="relative w-[85vw] md:w-[60vw] lg:w-[45vw] h-full group flex-shrink-0 transition-all duration-500">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] card-glow-bg rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+<div class="relative w-full h-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl transition-transform duration-700 hover:scale-[1.01]">
+<img alt="Alpine Star Lodge" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXr3fuspGGlOnCvLhDpISi_VeIrEIb0CXQlgd2gqw6ksWKTDS9sFTjWbIzVh7XWdmw5nGS3hoxyiFCBzkDcyjWYAqTe5Kp1NvpI5tS-bCB-Mkt1KMr3ZE3_zaMlCyvhF7Et0j8EMpaBW17A19JveqFHQtJhGc9WSXfsdBN3Fd9KlSr3QP3s6uR3wFm87r1THv78a25X3v630yQRGktbUrJbXMwG_BqBIRLht60e_yEaGLh0bZciahNsftZkOcZ2-MdCNw36GwYyCY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 glass-overlay-card p-6 md:p-8 rounded-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h2 class="text-3xl md:text-5xl font-serif text-white mb-2">Alpine Lodge</h2>
+<div class="flex items-center gap-2 text-primary/90 text-sm tracking-widest uppercase mb-1">
+<span class="material-symbols-outlined text-base">location_on</span>
+                                    Swiss Alps
+                                </div>
+</div>
+<div class="hidden md:block">
+<span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white text-xs border border-white/20 uppercase tracking-wider">
+                                    Snow Season
+                                </span>
+</div>
+</div>
+<p class="text-gray-300 font-light text-lg mb-6 line-clamp-2 opacity-90">
+                            High in the Swiss Alps, unparalleled views of the starry night.
+                        </p>
+<div class="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+<span class="text-white font-medium text-lg">$120 <span class="text-sm text-gray-400 font-light">/ night</span></span>
+<a class="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm uppercase tracking-wider font-medium group/link" href="#">
+                                View Property <span class="material-symbols-outlined text-lg group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="relative w-[85vw] md:w-[60vw] lg:w-[45vw] h-full group flex-shrink-0 transition-all duration-500">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] card-glow-bg rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+<div class="relative w-full h-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl transition-transform duration-700 hover:scale-[1.01]">
+<img alt="Travellers Crib" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcE_e9zzNMaLvBeR_zlgtRQuaoELHNsJcwxL6VLsNV5IophBlann8uRtER5KwXsaTV9rqABeD4LmS9eRFu73RYiOWgBic_dHGzx19rxbAJRG9vn4sjhzcUSzZlUWYEpCsN_O93ERlvu4GVThLsi8mHSWy9hXg-Fwr5OW8PDi857TN2kMGIBKJ-dsBCzicV-ltrfDr3BckO4tU6OF9c7SPiH4Ihlg1DRCIQfddre7mlaFZ_EeWmbXro5ZZcMExEmCJHnadVTwV3yeQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 glass-overlay-card p-6 md:p-8 rounded-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h2 class="text-3xl md:text-5xl font-serif text-white mb-2">Travellers Crib</h2>
+<div class="flex items-center gap-2 text-primary/90 text-sm tracking-widest uppercase mb-1">
+<span class="material-symbols-outlined text-base">location_on</span>
+                                   AV Road, India
+                               </div>
+</div>
+<div class="hidden md:block">
+<span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white text-xs border border-white/20 uppercase tracking-wider">
+                                   Trending
+                               </span>
+</div>
+</div>
+<p class="text-gray-300 font-light text-lg mb-6 line-clamp-2 opacity-90">
+                           Adventurous Musketeers. A rustic hideaway for the wandering soul.
+                       </p>
+<div class="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+<span class="text-white font-medium text-lg">$35 <span class="text-sm text-gray-400 font-light">/ night</span></span>
+<a class="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm uppercase tracking-wider font-medium group/link" href="#">
+                               View Property <span class="material-symbols-outlined text-lg group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="w-12 h-full flex-shrink-0"></div>
+</div>
+</div>
+</main>
+<footer class="border-t border-white/10 bg-[#05060A] pt-16 pb-8">
+<div class="max-w-[1920px] mx-auto px-6 lg:px-10">
+<div class="flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="text-center md:text-left">
+<a class="text-2xl font-serif font-bold text-white flex justify-center md:justify-start items-center gap-2 mb-2" href="#">
+<span class="material-symbols-outlined text-primary">camping</span>
+                         Crib Community
+                    </a>
+<p class="text-gray-500 text-sm">© 2024 Crib Community. All rights reserved.</p>
+</div>
+<div class="flex gap-8 text-sm text-gray-400">
+<a class="hover:text-primary transition-colors" href="#">Instagram</a>
+<a class="hover:text-primary transition-colors" href="#">Twitter</a>
+<a class="hover:text-primary transition-colors" href="#">LinkedIn</a>
+</div>
+<div class="flex gap-2">
+<input class="bg-white/5 border border-white/10 rounded-l-lg px-4 py-2 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none w-64" placeholder="Join our newsletter" type="email"/>
+<button class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-r-lg text-sm font-medium transition-colors">
+                        Send
+                    </button>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Force dark mode for this aesthetic
+        document.documentElement.classList.add('dark');
+    </script>
+</body></html>

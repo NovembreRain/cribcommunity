@@ -1,0 +1,104 @@
+# TASK: Build Admin Dashboard + Bookings + Room Type Manager
+
+## BEFORE YOU START
+Read:
+- AI_CONTEXT/system.md
+- AI_CONTEXT/skills/admin-module.md
+- AI_CONTEXT/skills/api-builder.md
+- packages/db/schema.prisma
+  Focus: Booking, Property, RoomType, Amenity, RoomTypeAmenity, Enquiry, Event, Job
+
+Confirm module folder structure in apps/admin/ before writing anything.
+
+## GOAL
+Build dashboard home + bookings module + room type + amenity manager.
+
+---
+
+## PART 1: Dashboard Home
+File: apps/admin/app/dashboard/page.tsx
+
+Summary cards:
+- Total bookings this month
+- Pending enquiries
+- Upcoming events (next 7 days)
+- Open job listings
+
+---
+
+## PART 2: Bookings Module
+
+### List View (apps/admin/app/modules/bookings/page.tsx)
+Table: Booking ID, Guest Name, Property, Room Type, Check-in, Check-out, Amount, Payment Status, Booking Status, Actions
+Features: pagination (20/page), filter by status, date range filter, search by guest name/email
+
+### Detail View (apps/admin/app/modules/bookings/[id]/page.tsx)
+Full record + status update buttons for payment_status and booking_status
+
+---
+
+## PART 3: Room Type Manager
+File: apps/admin/app/modules/properties/[id]/rooms/
+
+### Room Type List
+- List all RoomTypes for a Property
+- Each row: name, capacity, price, amenity count, Edit/Delete actions
+
+### Room Type Form (Create + Edit)
+Fields:
+- name, description, capacity, price_per_night
+- AmenityPicker component (see skills/admin-module.md)
+
+### AmenityPicker Component
+File: apps/admin/components/AmenityPicker.tsx
+
+Behaviour:
+1. Fetch GET /api/amenities on mount
+2. Display popular amenities (is_popular = true) as icon checkbox grid
+   - Each item: Lucide icon + name + checkbox
+   - Grouped by category
+3. Below grid: custom amenity input
+   - Text field for name
+   - Icon selector dropdown (searchable list of Lucide icon names)
+   - "Add" button → POST to /api/amenities (creates with is_popular = false)
+4. Selected amenities shown as icon pills below picker
+5. On room type save → write selected amenity IDs to RoomTypeAmenity
+
+---
+
+## API ROUTES NEEDED
+- GET /api/amenities → all amenities, popular first
+- POST /api/amenities → create custom amenity { name, icon, category }
+- GET /api/admin/bookings?page=&status=&search= → paginated
+- GET /api/admin/bookings/[id] → single booking
+- PATCH /api/admin/bookings/[id] → update status
+- GET /api/admin/properties/[id]/rooms → list room types
+- POST /api/admin/properties/[id]/rooms → create room type + amenities
+- PATCH /api/admin/properties/[id]/rooms/[roomId] → update room type + amenities
+- DELETE /api/admin/properties/[id]/rooms/[roomId] → delete room type
+
+## DONE WHEN
+- [ ] Dashboard shows real counts
+- [ ] Bookings list with filters and pagination
+- [ ] Booking status updatable via PATCH
+- [ ] AmenityPicker loads popular amenities as icon grid
+- [ ] Custom amenities can be added with icon selector
+- [ ] Room type form saves to RoomType + RoomTypeAmenity correctly
+- [ ] Amenity pills display on room type list
+- [ ] All admin routes auth-protected
+
+---
+
+## ✅ POST-BUILD VERIFICATION
+After completing this task, run before moving on:
+
+1. Run tests for this module:
+   npx vitest run --reporter=verbose [relevant test path]
+
+2. Run regression check on all previously built modules:
+   Execute AI_CONTEXT/tasks/run-tests.md
+
+3. If all pass → confirm with:
+   "All tests passing. Safe to proceed to next task."
+
+4. If any fail → fix before proceeding. Do not build on broken ground.
