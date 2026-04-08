@@ -22,7 +22,8 @@ A feature is NOT done until tests pass.
 
 ## HERO VIDEO
 The homepage hero uses a video (not an image).
-Video file lives in the GitHub repo under: public/videos/hero.mp4 (confirm path via GitHub MCP)
+Video file lives in the repo at: AI_CONTEXT/hero/hero-loop-cc.mp4
+Move to apps/web/public/videos/hero.mp4 during monorepo scaffold.
 Never replace video with an image component on the homepage.
 Hero must use Next.js <video> tag or a video component — not next/image.
 

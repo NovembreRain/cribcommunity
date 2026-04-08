@@ -1,0 +1,384 @@
+// ============================================================
+// Travellers Crib — Prisma Schema
+// Source of truth: Supabase (qjjetqtzexiydyfqohih)
+// Generated from: mcp__supabase__generate_typescript_types
+// Date: 2026-04-08
+//
+// ⚠️  RLS is currently DISABLED on all tables.
+//     Enable Row Level Security before production deployment.
+//     Use Supabase MCP to add RLS policies per table.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Use directUrl for Prisma migrations when behind a pooler
+  // directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────
+// MEDIA
+// Central media table — all images/videos reference this
+// ─────────────────────────────────────────────
+
+model Media {
+  id          String    @id
+  url         String
+  type        String    // "image" | "video"
+  alt_text    String?
+  uploaded_by String?
+  created_at  DateTime  @default(now())
+
+  // Relations
+  home_heroes      HomeHero[]
+  testimonials     Testimonial[]
+  timeline_events  TimelineEvent[]
+  blog_posts       BlogPost[]
+}
+
+// ─────────────────────────────────────────────
+// HOME
+// ─────────────────────────────────────────────
+
+model HomeHero {
+  id          String  @id
+  title       String
+  subtitle    String?
+  button_text String?
+  button_link String?
+  media_id    String?
+
+  media Media? @relation(fields: [media_id], references: [id])
+}
+
+model Testimonial {
+  id              String  @id
+  name            String
+  text            String
+  rating          Int
+  avatar_media_id String?
+
+  avatar Media? @relation(fields: [avatar_media_id], references: [id])
+}
+
+model GalleryMedia {
+  id         String @id
+  media_url  String
+  media_type String
+  sort_order Int    @default(0)
+}
+
+// ─────────────────────────────────────────────
+// LOCATIONS → PROPERTIES → ROOM TYPES
+// ─────────────────────────────────────────────
+
+model Location {
+  id            String   @id
+  name          String
+  slug          String   @unique
+  description   String?
+  city          String
+  state         String
+  country       String
+  latitude      Float?
+  longitude     Float?
+  manager_name  String?
+  contact_email String?
+  contact_phone String?
+  created_at    DateTime @default(now())
+
+  properties Property[]
+  events     Event[]
+}
+
+model Property {
+  id            String   @id
+  location_id   String
+  name          String
+  slug          String   @unique
+  description   String?
+  address       String
+  manager_name  String?
+  contact_phone String?
+  amenities     Json?    // Property-level amenity flags (JSONB — kept as-is)
+  check_in_time  String?
+  check_out_time String?
+  created_at    DateTime @default(now())
+
+  location  Location   @relation(fields: [location_id], references: [id])
+  room_types RoomType[]
+  bookings  Booking[]
+}
+
+model RoomType {
+  id              String  @id
+  property_id     String
+  name            String
+  description     String?
+  capacity        Int
+  price_per_night Float
+  images          Json?   // Array of image URLs (JSONB)
+
+  property   Property         @relation(fields: [property_id], references: [id])
+  amenities  RoomTypeAmenity[]
+  inventory  RoomInventory[]
+  bookings   Booking[]
+}
+
+// ─────────────────────────────────────────────
+// AMENITIES
+// Proper normalised amenity system
+// is_popular = true → shown in admin dropdown by default
+// icon = Lucide icon name (e.g. "wifi", "shower-head")
+// ─────────────────────────────────────────────
+
+model Amenity {
+  id         String  @id
+  name       String
+  icon       String  // Lucide icon name — render with <LucideIcon name={icon} />
+  category   String  // "comfort" | "food" | "connectivity" | "security" | etc.
+  is_popular Boolean @default(false)
+
+  room_types RoomTypeAmenity[]
+}
+
+model RoomTypeAmenity {
+  id           String @id
+  room_type_id String
+  amenity_id   String
+
+  room_type RoomType @relation(fields: [room_type_id], references: [id], onDelete: Cascade)
+  amenity   Amenity  @relation(fields: [amenity_id], references: [id], onDelete: Cascade)
+
+  @@unique([room_type_id, amenity_id])
+}
+
+// ─────────────────────────────────────────────
+// AVAILABILITY — NEVER store as static field
+// ─────────────────────────────────────────────
+
+model RoomInventory {
+  id              String   @id
+  room_type_id    String
+  date            DateTime @db.Date
+  available_count Int
+
+  room_type RoomType @relation(fields: [room_type_id], references: [id])
+}
+
+// ─────────────────────────────────────────────
+// BOOKINGS & PAYMENTS
+// ─────────────────────────────────────────────
+
+model Booking {
+  id             String   @id
+  property_id    String
+  room_type_id   String
+  guest_name     String
+  guest_email    String
+  guest_phone    String?
+  check_in_date  DateTime @db.Date
+  check_out_date DateTime @db.Date
+  total_amount   Float
+  payment_status String   // "pending" | "paid" | "refunded"
+  booking_status String   // "confirmed" | "cancelled" | "checked_in" | "checked_out"
+  source         String?  // "web" | "admin" | "ota"
+  created_at     DateTime @default(now())
+
+  property  Property  @relation(fields: [property_id], references: [id])
+  room_type RoomType  @relation(fields: [room_type_id], references: [id])
+  payments  Payment[]
+}
+
+model Payment {
+  id              String   @id
+  booking_id      String
+  amount          Float
+  payment_gateway String
+  transaction_id  String?
+  status          String
+  created_at      DateTime @default(now())
+
+  booking Booking @relation(fields: [booking_id], references: [id])
+}
+
+// ─────────────────────────────────────────────
+// COMMUNITY — EVENTS
+// ─────────────────────────────────────────────
+
+model Event {
+  id             String   @id
+  location_id    String
+  name           String
+  slug           String   @unique
+  type           String   // "social" | "workshop" | "music" | "wellness"
+  description    String?
+  start_datetime DateTime
+  end_datetime   DateTime
+  is_approved    Boolean  @default(false)
+  created_by     String   // admin user id or "guest"
+
+  location      Location           @relation(fields: [location_id], references: [id])
+  registrations EventRegistration[]
+}
+
+model EventRegistration {
+  id         String   @id
+  event_id   String
+  name       String
+  email      String
+  phone      String?
+  created_at DateTime @default(now())
+
+  event Event @relation(fields: [event_id], references: [id])
+}
+
+model EventProposal {
+  id               String   @id
+  applicant_name   String
+  applicant_phone  String?
+  applicant_email  String
+  proposal_details String
+  status           String   @default("pending") // "pending" | "approved" | "rejected"
+  created_at       DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────
+// COMMUNITY — OUR STORY
+// ─────────────────────────────────────────────
+
+model TimelineEvent {
+  id          String  @id
+  year        String
+  title       String
+  description String?
+  sort_order  Int     @default(0)
+  media_id    String?
+
+  media Media? @relation(fields: [media_id], references: [id])
+}
+
+// ─────────────────────────────────────────────
+// COMMUNITY — BLOG
+// ─────────────────────────────────────────────
+
+model BlogCategory {
+  id   String @id
+  name String
+  slug String @unique
+
+  posts BlogPost[]
+}
+
+model BlogPost {
+  id               String    @id
+  title            String
+  slug             String    @unique
+  excerpt          String?
+  content          String
+  author_id        String
+  category_id      String
+  featured_media_id String?
+  status           String    @default("draft") // "draft" | "published"
+  published_at     DateTime?
+  meta_title       String?
+  meta_description String?
+  og_image         String?
+
+  category       BlogCategory @relation(fields: [category_id], references: [id])
+  featured_media Media?       @relation(fields: [featured_media_id], references: [id])
+}
+
+// ─────────────────────────────────────────────
+// COMMUNITY — JOBS
+// ─────────────────────────────────────────────
+
+model Job {
+  id           String    @id
+  title        String
+  slug         String    @unique
+  location     String
+  salary_range String?
+  description  String
+  valid_through DateTime?
+  created_at   DateTime  @default(now())
+
+  applications JobApplication[]
+}
+
+model JobApplication {
+  id                 String   @id
+  job_id             String
+  applicant_name     String
+  email              String
+  phone              String?
+  resume_url         String
+  talent_description String?
+  created_at         DateTime @default(now())
+
+  job Job @relation(fields: [job_id], references: [id])
+}
+
+// ─────────────────────────────────────────────
+// CONTACT
+// ─────────────────────────────────────────────
+
+model Enquiry {
+  id                String    @id
+  name              String
+  email             String
+  phone             String?
+  message           String
+  intent            String?   // "booking" | "partnership" | "general"
+  source            String?
+  status            String    @default("new") // "new" | "responded" | "closed"
+  response_deadline DateTime?
+  created_at        DateTime  @default(now())
+}
+
+// ─────────────────────────────────────────────
+// FAQ
+// ─────────────────────────────────────────────
+
+model FAQ {
+  id         String @id
+  question   String
+  answer     String
+  category   String
+  sort_order Int    @default(0)
+}
+
+// ─────────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────────
+
+model User {
+  id            String   @id
+  email         String   @unique
+  password_hash String?
+  role          String   @default("USER") // "USER" | "EDITOR" | "ADMIN" | "SUPER_ADMIN"
+  created_at    DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────
+// ANALYTICS
+// ─────────────────────────────────────────────
+
+model PageView {
+  id         String   @id
+  path       String
+  user_agent String?
+  referrer   String?
+  timestamp  DateTime @default(now())
+}
+
+model EventTracking {
+  id         String   @id
+  event_name String
+  metadata   Json?
+  created_at DateTime @default(now())
+}

@@ -1,0 +1,170 @@
+{
+  "_meta": {
+    "authority": "Stitch MCP is visual authority. This file is props authority. They must agree.",
+    "stitch_project_id": "5532374877350495586",
+    "stitch_html_reference": "AI_CONTEXT/stitch-ui-kit.html",
+    "last_updated": "2026-04-08"
+  },
+
+  "NavBar": {
+    "props": ["brand", "links", "ctaLabel", "ctaHref", "isTransparent"],
+    "variants": ["default", "transparent-over-hero", "scrolled"],
+    "usage": "All pages — fixed top, transparent over hero, solid on scroll"
+  },
+
+  "HeroSection": {
+    "props": ["videoSrc", "imageFallback", "headline", "subheadline", "ctaLabel", "ctaHref", "overlayOpacity"],
+    "variants": ["video-fullscreen", "location-hero", "community-hero"],
+    "usage": "Homepage (video), Locations page (image overlay), Our Story page"
+  },
+
+  "PropertyCard": {
+    "props": ["id", "slug", "image", "locationName", "categoryIcon", "title", "rating", "reviewCount", "priceFrom", "currency", "description"],
+    "variants": ["default", "hover", "featured", "skeleton"],
+    "usage": "Locations explorer grid, property listings"
+  },
+
+  "LocationCard": {
+    "props": ["id", "slug", "image", "name", "city", "country", "tagline", "categoryIcon", "ctaLabel"],
+    "variants": ["default", "hover", "active"],
+    "usage": "Locations grid — six destination cards"
+  },
+
+  "SectionHeader": {
+    "props": ["title", "tabs", "activeTab", "onTabChange"],
+    "variants": ["with-tabs", "plain"],
+    "usage": "Before grid sections (Locations, Blog, Events)"
+  },
+
+  "FilterTabs": {
+    "props": ["options", "activeOption", "onChange"],
+    "variants": ["default", "active-tab"],
+    "usage": "Location filter (All, Asia, Europe, Americas)"
+  },
+
+  "RoomCard": {
+    "props": ["id", "roomType", "name", "description", "pricePerNight", "currency", "capacity", "availabilityCount", "image", "amenities", "isSelected"],
+    "variants": ["default", "selected", "unavailable", "skeleton"],
+    "usage": "Booking flow — room selection step, property detail page"
+  },
+
+  "RoomSelectionButton": {
+    "props": ["isSelected", "onSelect", "isDisabled"],
+    "variants": ["unselected", "selected", "disabled"],
+    "usage": "Inside RoomCard — bottom action"
+  },
+
+  "AmenityBadge": {
+    "props": ["icon", "label", "isPopular"],
+    "variants": ["default", "popular", "compact"],
+    "usage": "RoomCard amenity list, Property detail amenities section — icon is a Lucide icon name string"
+  },
+
+  "DatePicker": {
+    "props": ["selectedCheckIn", "selectedCheckOut", "onSelectCheckIn", "onSelectCheckOut", "disabledDates", "minDate", "maxDate"],
+    "variants": ["single-month", "range-select", "mobile-bottom-sheet"],
+    "usage": "Booking flow — date selection step"
+  },
+
+  "GuestSelector": {
+    "props": ["count", "min", "max", "onChange"],
+    "variants": ["default", "at-min", "at-max"],
+    "usage": "Booking flow — guest count step"
+  },
+
+  "PriceSummary": {
+    "props": ["basePrice", "discountedPrice", "currency", "nights", "cancellationPolicy", "taxAmount", "totalAmount"],
+    "variants": ["compact", "expanded"],
+    "usage": "Booking confirmation panel, booking bottom sheet"
+  },
+
+  "BookingButton": {
+    "props": ["label", "onClick", "isLoading", "isDisabled"],
+    "variants": ["default", "loading", "disabled"],
+    "usage": "Primary CTA in booking flow and property pages"
+  },
+
+  "ButtonPrimary": {
+    "props": ["label", "href", "onClick", "isLoading", "isDisabled", "icon", "iconPosition"],
+    "variants": ["default", "hover", "loading", "disabled"],
+    "usage": "All primary CTAs — gradient fill, rounded-full, px-8 py-3.5"
+  },
+
+  "ButtonSecondary": {
+    "props": ["label", "href", "onClick", "isDisabled"],
+    "variants": ["default", "hover", "disabled"],
+    "usage": "Secondary CTAs — transparent, gold border, rounded-full"
+  },
+
+  "ButtonLink": {
+    "props": ["label", "href", "onClick"],
+    "variants": ["default", "hover"],
+    "usage": "Inline text CTAs — orange text, underline, uppercase, tracked"
+  },
+
+  "SearchInput": {
+    "props": ["placeholder", "value", "onChange", "onSubmit"],
+    "variants": ["default", "focused", "filled"],
+    "usage": "Location search, property search — dark surface, rounded-xl, icon-left"
+  },
+
+  "TagBadge": {
+    "props": ["label", "variant", "onClick", "isActive"],
+    "variants": ["default", "active", "pill"],
+    "usage": "Category tags, blog tags, amenity categories"
+  },
+
+  "GlassPanel": {
+    "props": ["children", "className"],
+    "variants": ["default"],
+    "usage": "Design system base card — rgba surface, backdrop-blur-10, gold border"
+  },
+
+  "EventCard": {
+    "props": ["id", "slug", "title", "description", "date", "startDatetime", "endDatetime", "category", "categoryIcon", "location", "locationId", "isApproved"],
+    "variants": ["default", "featured", "past", "skeleton"],
+    "usage": "Events listing page, community hub upcoming events carousel"
+  },
+
+  "CarouselControl": {
+    "props": ["onPrev", "onNext", "isPrevDisabled", "isNextDisabled"],
+    "variants": ["active", "disabled"],
+    "usage": "Events carousel, testimonials carousel"
+  },
+
+  "BlogCard": {
+    "props": ["id", "slug", "title", "excerpt", "featuredImage", "category", "publishedAt", "author"],
+    "variants": ["featured", "standard", "list-item", "skeleton"],
+    "usage": "Blog listing page, community hub journal section"
+  },
+
+  "CTASection": {
+    "props": ["headline", "description", "primaryCtaLabel", "primaryCtaHref", "secondaryCtaLabel", "secondaryCtaHref"],
+    "variants": ["dual-cta", "newsletter", "centered"],
+    "usage": "Before footer on all major pages"
+  },
+
+  "PropertyHeader": {
+    "props": ["name", "rating", "reviewCount", "location", "distanceFromCenter", "heroImage"],
+    "variants": ["default", "mobile-sticky"],
+    "usage": "Property detail page header, booking flow header"
+  },
+
+  "TestimonialCard": {
+    "props": ["id", "name", "text", "rating", "avatarUrl"],
+    "variants": ["default", "featured"],
+    "usage": "Homepage testimonials section, property detail reviews"
+  },
+
+  "GalleryGrid": {
+    "props": ["media", "maxVisible", "onOpenLightbox"],
+    "variants": ["grid-2x2", "grid-3-col", "single-hero"],
+    "usage": "Property detail gallery, homepage gallery strip"
+  },
+
+  "Footer": {
+    "props": ["brand", "tagline", "navColumns", "socialLinks", "newsletterEnabled", "copyrightText"],
+    "variants": ["full", "minimal"],
+    "usage": "All pages — multi-column with newsletter subscribe"
+  }
+}

@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Crib Community — Ethereal Glow Design System
+ * CSS variables mapped to shadcn/ui conventions.
+ * All values are HSL so Tailwind opacity modifiers work (bg-primary/50).
+ */
+
+@layer base {
+  :root {
+    /* Light mode (not used — design is always dark, but defined for shadcn compat) */
+    --background: 220 36% 97%;
+    --foreground: 220 36% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 36% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 36% 7%;
+    --primary: 28 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 28% 94%;
+    --secondary-foreground: 220 36% 7%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8% 46%;
+    --accent: 38 96% 50%;
+    --accent-foreground: 220 36% 7%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 28 83% 53%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Ethereal Glow — primary dark theme */
+    --background: 220 36% 7%;       /* #0A0E14 */
+    --foreground: 0 0% 100%;        /* #FFFFFF */
+    --card: 220 28% 10%;            /* #151922 */
+    --card-foreground: 0 0% 82%;    /* #D1D1D1 */
+    --popover: 220 28% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 28 83% 53%;          /* #E67E22 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 28% 10%;       /* #151922 surface */
+    --secondary-foreground: 0 0% 82%;
+    --muted: 220 20% 14%;
+    --muted-foreground: 0 0% 56%;   /* #8E8E8E */
+    --accent: 38 96% 50%;           /* #F39C12 */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 28 36% 31%;           /* #8C6A43 gold-border */
+    --input: 220 28% 10%;
+    --ring: 28 83% 53%;             /* #E67E22 primary */
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+/* Glass panel utility (used everywhere in the Stitch design) */
+@layer components {
+  .glass-panel {
+    background: rgba(21, 25, 34, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(140, 106, 67, 0.3);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0A0E14; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
