@@ -10,11 +10,15 @@
 - packages/lib → Shared utilities
 
 ## DESIGN SOURCE OF TRUTH
-- Stitch Map defines ALL UI components
-- Mapping lives in AI_CONTEXT/design-map.json
-- No new UI components should be invented
-- Shared components → packages/ui/
-- Page-specific components → apps/web/components/[section]/
+- Google Stitch MCP = visual authority (colors, spacing, typography, layout)
+- AI_CONTEXT/design-map.json = component prop authority
+- AI_CONTEXT/design-screenshots/ = reference images
+- Workflow for every UI component:
+  1. Check design-map.json for props
+  2. Fetch screen from Stitch MCP for visual spec
+  3. Assemble — never freestyle
+- NEVER invent UI that doesn't exist in Stitch
+- NEVER add animations not specified in design-map.json or system.md animation rules
 
 ## HERO VIDEO (HOMEPAGE)
 - The homepage hero is a full-screen background VIDEO, not an image

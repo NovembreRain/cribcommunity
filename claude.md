@@ -33,6 +33,17 @@ Hero must use Next.js <video> tag or a video component — not next/image.
 - Always use Prisma via packages/db — never import PrismaClient directly.
 - Production TypeScript only. No pseudocode.
 
+## DESIGN SYSTEM — GOOGLE STITCH MCP
+- Stitch MCP is connected
+- All UI components come from Stitch — never invent layouts
+- Before building any UI component:
+  1. Run list_projects to find the Travellers Crib project
+  2. Run extract_design_context to get Design DNA (colors, fonts, spacing)
+  3. Run fetch_screen_code to get exact HTML/CSS for the screen
+- design-map.json in AI_CONTEXT/ is the component prop authority
+- Stitch MCP is the visual authority
+- These two must always agree — Stitch wins on visuals, design-map.json wins on props
+
 ## SUPABASE
 Supabase MCP is connected — use it directly for all DB operations.
 Use MCP to read schema, run migrations, validate queries.
