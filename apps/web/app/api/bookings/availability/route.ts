@@ -31,6 +31,14 @@ export async function GET(req: NextRequest) {
     )
   }
 
+  const todayUTC = new Date(new Date().toISOString().split('T')[0] + 'T00:00:00.000Z')
+  if (checkIn < todayUTC) {
+    return NextResponse.json(
+      { error: 'check_in cannot be in the past' },
+      { status: 400 },
+    )
+  }
+
   const roomType = await prisma.roomType.findUnique({
     where: { id: room_type_id },
     select: { id: true, price_per_night: true },

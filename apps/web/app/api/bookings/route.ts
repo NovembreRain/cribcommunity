@@ -49,6 +49,14 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const todayUTC = new Date(new Date().toISOString().split('T')[0] + 'T00:00:00.000Z')
+  if (checkIn < todayUTC) {
+    return NextResponse.json(
+      { error: 'check_in_date cannot be in the past' },
+      { status: 400 },
+    )
+  }
+
   // Verify room_type belongs to property
   const roomType = await prisma.roomType.findFirst({
     where: { id: room_type_id, property_id },

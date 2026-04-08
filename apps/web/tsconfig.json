@@ -19,6 +19,9 @@
       ],
       "@/app/*": [
         "./app/*"
+      ],
+      "@test-helpers/*": [
+        "../../packages/db/test-helpers/*"
       ]
     },
     "noEmit": true,
