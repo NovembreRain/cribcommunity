@@ -12,9 +12,8 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    // Required for server components in workspace packages
-    serverComponentsExternalPackages: ['@prisma/client', '@crib/db'],
-  },
+    serverComponentsExternalPackages: ['@prisma/client']
+  }
 }
 
 export default nextConfig
