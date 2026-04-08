@@ -104,3 +104,14 @@
 - Zod validation on all API routes
 - Return typed responses
 - Handle loading, error, and empty states always
+
+## SUPABASE MCP
+- Supabase MCP is live and connected
+- Check existing tables via MCP before writing schema.prisma
+- All DB changes go through Prisma migrations only
+
+## HERO VIDEO
+- Video is at: AI_CONTEXT/hero/ → move to apps/web/public/videos/hero.mp4
+- Homepage hero = HTML5 video, NOT next/image
+- <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+- Never replace with an image component

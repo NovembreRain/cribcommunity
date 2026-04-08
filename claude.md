@@ -5,7 +5,7 @@ Full rules live at: AI_CONTEXT/system.md
 Read that file before doing ANYTHING.
 
 ## REPO
-UI shell on GitHub: https://github.com/NovembreRain/cribcommunity-next
+GitHub repo: https://github.com/NovembreRain/cribcommunity
 When starting, read this repo structure via GitHub MCP.
 Cross-reference with local AI_CONTEXT/ folder.
 
@@ -34,6 +34,6 @@ Hero must use Next.js <video> tag or a video component — not next/image.
 - Production TypeScript only. No pseudocode.
 
 ## SUPABASE
-Connected manually via .env (DATABASE_URL set to Supabase PostgreSQL connection string).
-Do NOT look for Supabase MCP — it is not connected.
-All DB access is via Prisma only.
+Supabase MCP is connected — use it directly for all DB operations.
+Use MCP to read schema, run migrations, validate queries.
+Do NOT manually manage DATABASE_URL unless Prisma requires it.
