@@ -1,10 +1,38 @@
 /**
  * Global vitest setup — runs before any test file.
- * Loads the repo-root .env into process.env so Prisma picks up DATABASE_URL.
- * Handles quoted values and = signs inside values (connection strings).
+ * 1. Loads @testing-library/jest-dom matchers (toBeInTheDocument, etc.)
+ * 2. Loads the repo-root .env into process.env so Prisma picks up DATABASE_URL.
  */
+import '@testing-library/jest-dom'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
+
+// ── jsdom stubs required by framer-motion ────────────────────────────────────
+// framer-motion's whileInView feature calls IntersectionObserver on mount.
+// jsdom doesn't implement it — provide a no-op stub.
+if (typeof globalThis.IntersectionObserver === 'undefined') {
+  globalThis.IntersectionObserver = class IntersectionObserver {
+    constructor(_callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords(): IntersectionObserverEntry[] { return [] }
+    readonly root: Element | Document | null = null
+    readonly rootMargin: string = ''
+    readonly thresholds: ReadonlyArray<number> = []
+  }
+}
+
+// ResizeObserver — used by some motion layout features
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    constructor(_callback: ResizeObserverCallback) {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 const envPath = resolve(__dirname, '../../../.env')
 
