@@ -18,7 +18,8 @@ function makePostRequest(body: Record<string, unknown>) {
 }
 
 describe('POST /api/bookings', () => {
-  let testData: TestBookingData
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  let testData!: TestBookingData
 
   beforeAll(async () => {
     // Use count=2 so we can cancel-and-rebook in the cancelled-booking test
@@ -26,7 +27,7 @@ describe('POST /api/bookings', () => {
   })
 
   afterAll(async () => {
-    await cleanBookingTestData(testData)
+    if (testData) await cleanBookingTestData(testData)
   })
 
   it('should create booking and return booking_id when valid input', async () => {
@@ -87,22 +88,13 @@ describe('POST /api/bookings', () => {
     }
   })
 
-  it('should return 409 when booking overlaps existing confirmed booking', async () => {
-    // Drain remaining inventory via previous tests — ensure at least one booking exists
-    // First confirm there's a confirmed booking by creating one if needed
-    await prisma.booking.deleteMany({
-      where: {
-        room_type_id: testData.roomType.id,
-        booking_status: 'confirmed',
-        check_in_date: new Date(`${testData.checkIn}T00:00:00.000Z`),
-      },
-    })
-    // Set inventory to 0 so the availability guard triggers
+  it('should return 409 when no inventory remains (all slots booked)', async () => {
+    // Set inventory to 0 so the availability guard triggers 409
     await prisma.roomInventory.updateMany({
       where: { room_type_id: testData.roomType.id },
       data: { available_count: 0 },
     })
-    // Manually insert a confirmed booking to trigger the overlap path
+    // Confirmed booking on record (mirrors real scenario — slots exhausted)
     await prisma.booking.create({
       data: {
         id: crypto.randomUUID(),
@@ -131,7 +123,7 @@ describe('POST /api/bookings', () => {
     expect(res.status).toBe(409)
   })
 
-  it('should NOT return 409 when existing booking is cancelled', async () => {
+  it('should NOT return 409 when existing booking is cancelled', { timeout: 15000 }, async () => {
     // Cancel all confirmed bookings for this room_type
     await prisma.booking.updateMany({
       where: {

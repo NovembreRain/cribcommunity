@@ -22,14 +22,15 @@ function daysFromNowStr(n: number): string {
 }
 
 describe('GET /api/bookings/availability', () => {
-  let testData: TestBookingData
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  let testData!: TestBookingData
 
   beforeAll(async () => {
     testData = await seedBookingTestData({ inventoryCount: 2 })
   })
 
   afterAll(async () => {
-    await cleanBookingTestData(testData)
+    if (testData) await cleanBookingTestData(testData)
   })
 
   it('should return available:true when inventory exists for all dates', async () => {

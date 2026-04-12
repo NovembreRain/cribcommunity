@@ -1,6 +1,11 @@
+import { prisma } from '@crib/db'
+import { truncate } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
+
+export const dynamic = 'force-dynamic'
 import { HeroSection } from '@/components/home/HeroSection'
 import { SectionShell } from '@/components/home/SectionShell'
+import { LocationCard } from '@/components/location/LocationCard'
 
 /**
  * Homepage — /
@@ -15,7 +20,23 @@ import { SectionShell } from '@/components/home/SectionShell'
  *  4. Community (placeholder grid — data task: build-community-pages.md)
  *  5. Testimonials (placeholder row — data task: build-testimonials.md)
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const locations = await prisma.location.findMany({
+    take: 3,
+    orderBy: { name: 'asc' },
+    include: {
+      properties: {
+        take: 1,
+        include: {
+          room_types: {
+            take: 1,
+            select: { images: true },
+          },
+        },
+      },
+    },
+  })
+
   return (
     <main className="min-h-screen bg-background-dark">
       <NavBar />
@@ -31,20 +52,42 @@ export default function HomePage() {
         description="From ancient temples to coastal cliffs — each Crib is a world unto itself."
         className="bg-background-dark"
       >
-        {/* Location card grid placeholder */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="glass-panel rounded-2xl h-72 animate-pulse flex items-end p-6"
-              aria-hidden="true"
-            >
-              <div className="space-y-2 w-full">
-                <div className="h-3 w-24 bg-white/10 rounded" />
-                <div className="h-5 w-40 bg-white/10 rounded" />
-              </div>
-            </div>
-          ))}
+          {locations.length > 0
+            ? locations.map((location, i) => {
+                const firstImage = location.properties[0]?.room_types[0]?.images
+                const images = Array.isArray(firstImage) ? (firstImage as string[]) : []
+                const coverImage = images[0] ?? null
+                const tagline = location.description
+                  ? truncate(location.description, 70)
+                  : `${location.city}, ${location.country}`
+
+                return (
+                  <LocationCard
+                    key={location.id}
+                    id={location.id}
+                    slug={location.slug}
+                    image={coverImage}
+                    name={location.name}
+                    city={location.city}
+                    country={location.country}
+                    tagline={tagline}
+                    index={i}
+                  />
+                )
+              })
+            : Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="glass-panel rounded-2xl h-80 animate-pulse flex items-end p-6"
+                  aria-hidden="true"
+                >
+                  <div className="space-y-2 w-full">
+                    <div className="h-3 w-24 bg-white/10 rounded" />
+                    <div className="h-5 w-40 bg-white/10 rounded" />
+                  </div>
+                </div>
+              ))}
         </div>
 
         {/* View all link — exact Stitch hyperlink pattern */}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { prisma, Prisma } from '@crib/db'
+import { prisma } from '@crib/db'
 import { checkRoomAvailability, parseDate } from '@/lib/availability'
 
 const bookingSchema = z.object({
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // Step 3: Check inventory availability
+  // Check inventory availability (fast pre-check before the transaction)
   const { available, dates } = await checkRoomAvailability(room_type_id, checkIn, checkOut)
   if (!available) {
     return NextResponse.json(
@@ -79,104 +79,68 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // Step 4: Overlap check on Booking table (belt-and-suspenders guard)
-  const overlappingBooking = await prisma.booking.findFirst({
-    where: {
-      room_type_id,
-      booking_status: { not: 'cancelled' },
-      check_in_date: { lt: checkOut },
-      check_out_date: { gt: checkIn },
-    },
-    select: { id: true },
-  })
-
-  if (overlappingBooking) {
-    return NextResponse.json(
-      { error: 'No availability for the selected dates' },
-      { status: 409 },
-    )
-  }
-
-  // Step 5: Transaction — re-verify inventory then create booking + decrement
   const totalNights = dates.length
   const totalAmount = parseFloat((roomType.price_per_night * totalNights).toFixed(2))
 
   let booking: { id: string; booking_status: string; total_amount: number; check_in_date: Date; check_out_date: Date }
 
   try {
-    booking = await prisma.$transaction(
-      async (tx) => {
-        // Re-fetch inventory inside transaction to prevent race conditions
-        const inventory = await tx.roomInventory.findMany({
-          where: {
-            room_type_id,
-            date: { gte: checkIn, lt: checkOut },
-          },
-          select: { id: true, date: true, available_count: true },
-        })
+    booking = await prisma.$transaction(async (tx) => {
+      // Re-fetch inventory rows inside the transaction
+      const inventory = await tx.roomInventory.findMany({
+        where: { room_type_id, date: { gte: checkIn, lt: checkOut } },
+        select: { id: true, date: true, available_count: true },
+      })
 
-        // Verify all dates still have availability
-        const nightCount = dates.length
-        if (inventory.length < nightCount) {
+      if (inventory.length < totalNights) {
+        throw new Error('INVENTORY_UNAVAILABLE')
+      }
+
+      // Create booking first
+      const newBooking = await tx.booking.create({
+        data: {
+          id: crypto.randomUUID(),
+          property_id,
+          room_type_id,
+          guest_name,
+          guest_email,
+          guest_phone: guest_phone ?? null,
+          check_in_date: checkIn,
+          check_out_date: checkOut,
+          total_amount: totalAmount,
+          payment_status: 'pending',
+          booking_status: 'confirmed',
+          source: 'web',
+        },
+        select: {
+          id: true,
+          booking_status: true,
+          total_amount: true,
+          check_in_date: true,
+          check_out_date: true,
+        },
+      })
+
+      // Atomically decrement each night — WHERE available_count > 0 prevents
+      // going below zero under concurrent load without needing Serializable isolation.
+      for (const inv of inventory) {
+        const rowsUpdated = await tx.$executeRaw`
+          UPDATE "RoomInventory"
+          SET available_count = available_count - 1
+          WHERE id = ${inv.id} AND available_count > 0
+        `
+        if (rowsUpdated === 0) {
           throw new Error('INVENTORY_UNAVAILABLE')
         }
-        const allAvailable = inventory.every((r) => r.available_count > 0)
-        if (!allAvailable) {
-          throw new Error('INVENTORY_UNAVAILABLE')
-        }
+      }
 
-        // Create booking
-        const newBooking = await tx.booking.create({
-          data: {
-            id: crypto.randomUUID(),
-            property_id,
-            room_type_id,
-            guest_name,
-            guest_email,
-            guest_phone: guest_phone ?? null,
-            check_in_date: checkIn,
-            check_out_date: checkOut,
-            total_amount: totalAmount,
-            payment_status: 'pending',
-            booking_status: 'confirmed',
-            source: 'web',
-          },
-          select: {
-            id: true,
-            booking_status: true,
-            total_amount: true,
-            check_in_date: true,
-            check_out_date: true,
-          },
-        })
-
-        // Decrement inventory for each night
-        for (const inv of inventory) {
-          await tx.roomInventory.update({
-            where: { id: inv.id },
-            data: { available_count: { decrement: 1 } },
-          })
-        }
-
-        return newBooking
-      },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    )
+      return newBooking
+    })
   } catch (err) {
     const message = err instanceof Error ? err.message : ''
     if (message === 'INVENTORY_UNAVAILABLE') {
       return NextResponse.json(
         { error: 'No availability for the selected dates' },
-        { status: 409 },
-      )
-    }
-    // Serialization failure from concurrent transaction
-    if (
-      err instanceof Prisma.PrismaClientKnownRequestError &&
-      err.code === 'P2034'
-    ) {
-      return NextResponse.json(
-        { error: 'Booking conflict — please try again' },
         { status: 409 },
       )
     }
