@@ -165,9 +165,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 ```
 apps/web/components/
-  home/         Homepage-specific: NavBar, HeroSection, SectionShell
-  location/     Location/property pages: LocationCard, PropertyCard, AmenityBadge, LucideIcon
-  property/     Property detail + booking: RoomTypeCard, AvailabilityCalendar, BookingForm (to build)
+  home/         NavBar, HeroSection, SectionShell
+  location/     LocationCard, PropertyCard, AmenityBadge, LucideIcon
+  property/     RoomTypeCard, AvailabilityCalendar, BookingForm, PropertyBookingPanel
   ui/           shadcn/ui installed components (npx shadcn@latest add [name])
 
 packages/ui/src/  Shared components used by both web + admin
@@ -247,15 +247,41 @@ PaginatedResponse<T>       // { data: T[], total, page, pageSize, hasMore }
 
 ```
 apps/web/__tests__/
-  api/           Integration tests (node environment, real Supabase)
+  api/                    Integration tests (@vitest-environment node, real Supabase)
     amenities.test.ts
     bookings/
       availability.test.ts
       create.test.ts
-  components/    Unit tests (jsdom environment, mock API calls)
-    *.test.tsx
-  setup.ts       Manually parses ../../.env into process.env
+  components/             Component unit tests (jsdom, mocked fetch)
+    RoomTypeCard.test.tsx
+    LocationCard.test.tsx
+    PropertyCard.test.tsx
+    AvailabilityCalendar.test.tsx
+  setup.ts                @testing-library/jest-dom + IntersectionObserver/ResizeObserver stubs + .env loader
 ```
+
+### Component Test Pattern (jsdom, mocked fetch)
+
+```ts
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { MyComponent } from '@/components/...'
+
+beforeEach(() => {
+  global.fetch = vi.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({ data: { ... } }),
+  })
+})
+afterEach(() => { vi.restoreAllMocks() })
+
+it('shows content after fetch', async () => {
+  render(<MyComponent />)
+  await waitFor(() => expect(screen.getByText('Something')).toBeDefined())
+})
+```
+
+**Important:** framer-motion's `whileInView` calls `IntersectionObserver` on mount. The `setup.ts` file stubs it — all tests inherit this automatically.
 
 ### API Test Pattern
 

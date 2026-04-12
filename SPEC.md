@@ -191,18 +191,17 @@ Body: `{ name, icon (kebab-case Lucide name), category, is_popular? }`
 - Grid of `PropertyCard` — each shows: image, amenity pills (top 4 popular), starting price (cheapest room type), "New" badge (no reviews system yet)
 - PropertyCard links to `/properties/[slug]` (not yet built)
 
-**Property Detail /properties/[slug]** ← NOT YET BUILT
-- Fetches via GET /api/properties/[slug]
-- PropertyHeader: name, location, hero image
-- Gallery of room images
-- RoomTypeCard × n — each with amenity pills and "Check Availability" CTA
-- AvailabilityCalendar (client component) — calls GET /api/bookings/availability
-- BookingButton — submits POST /api/bookings
+**Property Detail /properties/[slug]** ✅
+- Server component, `force-dynamic`, `notFound()`, dynamic metadata
+- Prisma query: property + location + room_types (ordered by price asc) + amenities
+- Hero image from first room type image, breadcrumb nav (Locations → Location → Property)
+- `PropertyBookingPanel` (client) orchestrates the full booking flow:
+  1. `RoomTypeCard` × n — amenity pills (first 6 + "+N more"), isSelected state
+  2. `AvailabilityCalendar` — monthly grid, calls GET /api/bookings/availability, past/unavailable/available/range states, range validation
+  3. `BookingForm` — guest name/email/phone, Zod client validation, POST /api/bookings, loading/error states
+  4. Confirmation panel — booking_id, dates, total, "Book Another Room" reset
 
-**Booking Flow** ← NOT YET BUILT
-- Date selection via AvailabilityCalendar
-- Guest details form
-- Confirmation page
+**Booking Flow** ✅ — Integrated into property page (no separate route needed)
 
 ### Admin App (apps/admin) ← NOT YET BUILT
 Modules: Locations, Properties (with RoomType management), Bookings, Events, Blog, Jobs, Enquiries, FAQ, Users.
@@ -272,18 +271,26 @@ Only use `opacity` and `transform` — never animate `width`/`height`.
 
 ## 7. Testing
 
-**Framework:** Vitest 2.1.9  
-**Environment:** `@vitest-environment node` annotation on API test files  
-**DB:** Real Supabase (no mocks for DB — integration tests only)  
-**Env loading:** `apps/web/__tests__/setup.ts` manually parses `../../.env` into `process.env`  
-**Test run:** `cd apps/web && npx vitest run --reporter=verbose`  
-**Current state:** 19/19 tests passing
+**Framework:** Vitest 2.1.9
+**Libraries:** `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`
+**Environments:**
+- `@vitest-environment node` — API integration tests (real Supabase, no DB mocks)
+- `@vitest-environment jsdom` (default) — component unit tests (mocked fetch/APIs)
+
+**Env loading:** `apps/web/__tests__/setup.ts` — imports `@testing-library/jest-dom`, stubs `IntersectionObserver` + `ResizeObserver` (required by framer-motion `whileInView` in jsdom), manually parses `../../.env` into `process.env`
+
+**Test run:** `cd apps/web && npx vitest run --reporter=verbose`
+**Current state:** 51/51 tests passing (7 test files)
 
 Test files:
-- `__tests__/api/amenities.test.ts` — 5 tests
-- `__tests__/api/bookings/availability.test.ts` — 7 tests
-- `__tests__/api/bookings/create.test.ts` — 7 tests
-- `__tests__/setup.ts` — .env loader
+- `__tests__/api/amenities.test.ts` — 5 tests (node, real DB)
+- `__tests__/api/bookings/availability.test.ts` — 7 tests (node, real DB)
+- `__tests__/api/bookings/create.test.ts` — 7 tests (node, real DB)
+- `__tests__/components/RoomTypeCard.test.tsx` — 6 tests (jsdom)
+- `__tests__/components/LocationCard.test.tsx` — 7 tests (jsdom)
+- `__tests__/components/PropertyCard.test.tsx` — 9 tests (jsdom)
+- `__tests__/components/AvailabilityCalendar.test.tsx` — 10 tests (jsdom, mocked fetch)
+- `__tests__/setup.ts` — shared setup (jest-dom + browser API stubs + .env loader)
 - `packages/db/test-helpers/seed-booking.ts` — Location→Property→RoomType→Inventory seed chain
 
 **Rule:** Feature is NOT done until tests pass. Never start a new task without running the full suite first.
