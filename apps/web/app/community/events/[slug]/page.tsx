@@ -24,8 +24,14 @@ export async function generateMetadata({
   }
 }
 
-export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function EventDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ registered?: string }>
+}) {
+  const [{ slug }, { registered }] = await Promise.all([params, searchParams])
   const event = await prisma.event.findUnique({
     where: { slug, is_approved: true },
     include: {
@@ -93,6 +99,16 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
         {/* Registration form */}
         {!isPast && (
           <div className="glass-panel rounded-2xl p-6 border border-gold-border/20 space-y-5">
+            {registered === 'true' ? (
+              <div className="text-center py-6 space-y-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <p className="font-display text-xl text-text-high">You&apos;re registered!</p>
+                <p className="text-text-medium text-sm">We&apos;ll see you there. Check your email for details.</p>
+              </div>
+            ) : (
+              <>
             <h2 className="font-display text-xl text-text-high">Register for this Event</h2>
             <form action={registerForEvent} className="space-y-4">
               <input type="hidden" name="event_id" value={event.id} />
@@ -106,6 +122,8 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
                 Register Now
               </button>
             </form>
+              </>
+            )}
           </div>
         )}
 

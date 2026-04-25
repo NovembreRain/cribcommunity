@@ -85,13 +85,11 @@ export default async function LocationDetailPage({ params }: Props) {
     }
 
     return {
-      id: property.id,
       slug: property.slug,
       image: allImages[0] ?? null,
       locationName: location.name,
       title: property.name,
       rating: null as number | null,
-      reviewCount: 0,
       priceFrom: cheapestRoom?.price_per_night ?? 0,
       currency: 'INR',
       description: property.description,
@@ -153,7 +151,7 @@ export default async function LocationDetailPage({ params }: Props) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {propertyCards.map((prop, i) => (
-              <PropertyCard key={prop.id} {...prop} index={i} />
+              <PropertyCard key={prop.slug} {...prop} index={i} />
             ))}
           </div>
         )}

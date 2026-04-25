@@ -216,6 +216,7 @@ model Event {
   location_id    String
   property_id    String?
   name           String
+  images         Json?
   slug           String   @unique
   type           String   // "social" | "workshop" | "music" | "wellness"
   description    String?

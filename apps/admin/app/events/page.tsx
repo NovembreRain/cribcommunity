@@ -100,20 +100,28 @@ function EventTable({
               <td className="px-4 py-3 text-text-low text-xs">{formatDateTime(e.start_datetime)}</td>
               <td className="px-4 py-3 text-text-low">{e._count.registrations}</td>
               <td className="px-4 py-3">
-                <form action={toggleEventApproval}>
-                  <input type="hidden" name="id" value={e.id} />
-                  <input type="hidden" name="approved" value={e.is_approved ? 'false' : 'true'} />
-                  <button
-                    type="submit"
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                      e.is_approved
-                        ? 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20'
-                        : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
-                    }`}
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/events/${e.id}/edit`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium border border-gold-border/20 text-text-low hover:bg-white/5 transition-colors"
                   >
-                    {e.is_approved ? 'Revoke' : 'Approve'}
-                  </button>
-                </form>
+                    Edit
+                  </Link>
+                  <form action={toggleEventApproval}>
+                    <input type="hidden" name="id" value={e.id} />
+                    <input type="hidden" name="approved" value={e.is_approved ? 'false' : 'true'} />
+                    <button
+                      type="submit"
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                        e.is_approved
+                          ? 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20'
+                          : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+                      }`}
+                    >
+                      {e.is_approved ? 'Revoke' : 'Approve'}
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           ))}

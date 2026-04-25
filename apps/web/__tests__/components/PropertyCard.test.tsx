@@ -3,13 +3,11 @@ import { render, screen } from '@testing-library/react'
 import { PropertyCard } from '@/components/location/PropertyCard'
 
 const BASE_PROPS = {
-  id: 'prop-001',
   slug: 'the-dune-house',
   image: null,
   locationName: 'Crib Goa',
   title: 'The Dune House',
   rating: null,
-  reviewCount: 0,
   priceFrom: 799,
   currency: 'INR',
   description: 'A soulful hideaway tucked behind Anjuna beach.',

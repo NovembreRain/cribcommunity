@@ -9,13 +9,11 @@ import { AmenityBadge } from './AmenityBadge'
 const EASE = [0.25, 0.1, 0.25, 1] as const
 
 interface PropertyCardProps {
-  id: string
   slug: string
   image: string | null
   locationName: string
   title: string
   rating: number | null
-  reviewCount: number
   priceFrom: number
   currency?: string
   description: string | null

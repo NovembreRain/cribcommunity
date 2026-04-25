@@ -10,7 +10,12 @@ export const metadata: Metadata = {
   description: 'Get in touch with Crib Community — bookings, partnerships, or just to say hello.',
 }
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sent?: string }>
+}) {
+  const { sent } = await searchParams
   return (
     <main className="min-h-screen bg-background-dark">
       <NavBar />
@@ -32,6 +37,17 @@ export default function ContactPage() {
           {/* Contact form */}
           <div className="glass-panel rounded-2xl p-8 border border-gold-border/20 space-y-6">
             <h2 className="font-display text-xl text-text-high">Send a Message</h2>
+
+            {sent === 'true' && (
+              <div className="flex items-start gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                <svg className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                <div>
+                  <p className="text-emerald-400 text-sm font-medium">Message sent!</p>
+                  <p className="text-emerald-400/70 text-xs mt-0.5">We'll get back to you within 24 hours.</p>
+                </div>
+              </div>
+            )}
+
             <form action={submitEnquiry} className="space-y-5">
               <Field label="Name *" name="name" placeholder="Your full name" />
               <Field label="Email *" name="email" placeholder="you@example.com" />

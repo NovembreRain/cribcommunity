@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { prisma } from '@crib/db'
 import { formatDate } from '@crib/lib'
+import Image from 'next/image'
 import { NavBar } from '@/components/home/NavBar'
 import { ChevronRight } from 'lucide-react'
 import { Footer } from '@/components/home/Footer'
@@ -46,6 +47,13 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           <ChevronRight size={12} />
           <span className="text-primary">{post.category.name}</span>
         </nav>
+
+        {/* Cover image */}
+        {post.og_image && (
+          <div className="relative w-full h-72 rounded-2xl overflow-hidden">
+            <Image src={post.og_image} alt={post.title} fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
+          </div>
+        )}
 
         {/* Header */}
         <header className="space-y-4">
