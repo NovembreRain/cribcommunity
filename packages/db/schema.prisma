@@ -83,6 +83,7 @@ model Location {
   city          String
   state         String
   country       String
+  images        Json?    // Array of image URLs (up to 10)
   latitude      Float?
   longitude     Float?
   manager_name  String?
@@ -111,6 +112,7 @@ model Property {
   location  Location   @relation(fields: [location_id], references: [id])
   room_types RoomType[]
   bookings  Booking[]
+  events    Event[]
 }
 
 model RoomType {
@@ -212,6 +214,7 @@ model Payment {
 model Event {
   id             String   @id
   location_id    String
+  property_id    String?
   name           String
   slug           String   @unique
   type           String   // "social" | "workshop" | "music" | "wellness"
@@ -222,6 +225,7 @@ model Event {
   created_by     String   // admin user id or "guest"
 
   location      Location           @relation(fields: [location_id], references: [id])
+  property      Property?          @relation(fields: [property_id], references: [id])
   registrations EventRegistration[]
 }
 
@@ -348,6 +352,7 @@ model FAQ {
   question   String
   answer     String
   category   String
+  context    String @default("general") // "general" | "location" | "property" | "events" | "careers" | "booking"
   sort_order Int    @default(0)
 }
 

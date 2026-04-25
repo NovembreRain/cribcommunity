@@ -6,6 +6,8 @@ import { prisma } from '@crib/db'
 import { NavBar } from '@/components/home/NavBar'
 import { PropertyBookingPanel } from '@/components/property/PropertyBookingPanel'
 import { LucideIcon } from '@/components/location/LucideIcon'
+import { Footer } from '@/components/home/Footer'
+import { FAQSection } from '@/components/home/FAQSection'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PropertyPage({ params }: Props) {
   const { slug } = await params
 
-  const property = await prisma.property.findUnique({
+  const [property, faqs] = await Promise.all([
+  prisma.property.findUnique({
     where: { slug },
     include: {
       location: {
@@ -50,7 +53,9 @@ export default async function PropertyPage({ params }: Props) {
         },
       },
     },
-  })
+  }),
+  prisma.fAQ.findMany({ where: { context: 'property' }, orderBy: { sort_order: 'asc' } }),
+])
 
   if (!property) notFound()
 
@@ -164,31 +169,10 @@ export default async function PropertyPage({ params }: Props) {
         </section>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-gold-border/20 py-12 px-6 mt-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center">
-            <span className="text-white font-display text-2xl font-bold italic tracking-tighter">
-              Crib
-            </span>
-            <span className="text-primary not-italic text-4xl leading-none font-display">.</span>
-          </div>
-          <p className="text-text-low text-xs uppercase tracking-widest">
-            © {new Date().getFullYear()} Crib Community — All rights reserved
-          </p>
-          <nav className="flex gap-6" aria-label="Footer navigation">
-            {['Locations', 'Events', 'Blog', 'Contact'].map((link) => (
-              <a
-                key={link}
-                href={`/${link.toLowerCase()}`}
-                className="text-xs font-bold uppercase tracking-widest text-text-low hover:text-primary transition-colors"
-              >
-                {link}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </footer>
+      {faqs.length > 0 && (
+        <FAQSection faqs={faqs} title="Property FAQ" />
+      )}
+      <Footer />
     </main>
   )
 }

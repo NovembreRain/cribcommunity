@@ -4,6 +4,7 @@ import { truncate } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
 import { SectionShell } from '@/components/home/SectionShell'
 import { LocationCard } from '@/components/location/LocationCard'
+import { Footer } from '@/components/home/Footer'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,12 +67,14 @@ export default async function LocationsPage() {
                 ? truncate(location.description, 70)
                 : `${location.city}, ${location.country}`
 
+              const locationImages = Array.isArray(location.images) ? (location.images as string[]) : []
               return (
                 <LocationCard
                   key={location.id}
                   id={location.id}
                   slug={location.slug}
                   image={coverImage}
+                  images={locationImages.length > 0 ? locationImages : coverImage ? [coverImage] : []}
                   name={location.name}
                   city={location.city}
                   country={location.country}
@@ -84,31 +87,7 @@ export default async function LocationsPage() {
         )}
       </SectionShell>
 
-      {/* Footer */}
-      <footer className="border-t border-gold-border/20 py-12 px-6 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center">
-            <span className="text-white font-display text-2xl font-bold italic tracking-tighter">
-              Crib
-            </span>
-            <span className="text-primary not-italic text-4xl leading-none font-display">.</span>
-          </div>
-          <p className="text-text-low text-xs uppercase tracking-widest">
-            © {new Date().getFullYear()} Crib Community — All rights reserved
-          </p>
-          <nav className="flex gap-6" aria-label="Footer navigation">
-            {['Locations', 'Events', 'Blog', 'Contact'].map((link) => (
-              <a
-                key={link}
-                href={`/${link.toLowerCase()}`}
-                className="text-xs font-bold uppercase tracking-widest text-text-low hover:text-primary transition-colors"
-              >
-                {link}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }

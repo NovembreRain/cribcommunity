@@ -22,107 +22,40 @@
 
 ---
 
-## → Next: Module C — Admin App
+## ✅ Module C — Admin App (Complete)
 
-### C1 — Admin Layout + Sidebar (~25 min)
-**Files:** `apps/admin/app/layout.tsx`, `apps/admin/components/AdminSidebar.tsx`, `apps/admin/middleware.ts`
-- Sidebar nav: Dashboard, Locations, Properties, Bookings, Events, Blog, Jobs, Enquiries, FAQ, Users
-- Topbar: current page title + logout button placeholder
-- Auth guard via middleware: redirect to /login if no session (use next-auth or simple cookie check for now)
-- Style: `surface-dark` sidebar, `gold-border/20` dividers, Ethereal Glow tokens
-- Install `next-auth@beta` in apps/admin
+- [x] C1 — Sidebar + layout (`apps/admin/app/layout.tsx`, `components/AdminSidebar.tsx`)
+- [x] C2 — Dashboard (`apps/admin/app/page.tsx`) — stat cards + recent bookings table
+- [x] C3 — Locations CRUD (`/locations`, `/locations/new`, `/locations/[id]/edit`, server actions)
+- [x] C4 — Properties CRUD (`/properties`, `/properties/new`, `/properties/[id]/edit`, server actions)
+- [x] C5 — Bookings (`/bookings`) — table + status update via server action
+- [x] C6 — Events (`/events`) — approve/revoke per event
+- [x] C7 — Blog (`/blog`, `/blog/new`) — list + create + publish/unpublish + delete
+- [x] C8 — Jobs (`/jobs`, `/jobs/new`), Enquiries (`/enquiries`), FAQ (`/faq`, `/faq/new`), Users (`/users`)
 
-### C2 — Admin Dashboard (~20 min)
-**File:** `apps/admin/app/page.tsx`
-- Parallel Prisma counts:
-  ```ts
-  const [locations, properties, confirmedBookings, events] = await Promise.all([
-    prisma.location.count(),
-    prisma.property.count(),
-    prisma.booking.count({ where: { booking_status: 'confirmed' } }),
-    prisma.event.count({ where: { is_approved: true } }),
-  ])
-  ```
-- Stat cards: Locations, Properties, Active Bookings, Events
-- Recent bookings table: last 10, columns: guest name, property, check-in/out, total, status
-
-### C3 — Locations CRUD (~25 min)
-**Files:** `apps/admin/app/locations/page.tsx`, `.../new/page.tsx`, `.../[id]/edit/page.tsx`
-- Table: name, slug, city, country, property count
-- Create/edit form: name, slug (auto from name via `slugify()`), city, state, country, description
-- Server actions for create + update + delete
-
-### C4 — Properties + RoomType Management (~30 min)
-**Files:** `apps/admin/app/properties/page.tsx`, `.../[id]/page.tsx`, `.../[id]/rooms/new/page.tsx`
-- Properties table with location filter
-- Property detail: show room types list
-- New room form: name, description, capacity, price_per_night, images (URL inputs), amenity multi-select
-- Amenity multi-select: populate from GET /api/amenities, popular shown first, custom add option
-
-### C5 — Bookings Management (~20 min)
-**File:** `apps/admin/app/bookings/page.tsx`
-- Table: guest, email, property, room type, check-in/out, amount, payment status, booking status
-- Filter by: status, property, date range
-- Server actions: update booking_status (confirmed → checked_in → checked_out / cancelled)
-
-### C6 — Events Management (~25 min)
-**Files:** `apps/admin/app/events/page.tsx`, `.../new/page.tsx`
-- Table with approve/reject actions (updates `is_approved`)
-- Create event: name, slug, type (social/workshop/music/wellness), location_id, description, start/end datetime
-- EventProposal review panel (proposals from public)
-
-### C7 — Blog Management (~25 min)
-**Files:** `apps/admin/app/blog/page.tsx`, `.../new/page.tsx`, `.../[id]/edit/page.tsx`
-- List posts with status filter (draft/published)
-- Create/edit: title, slug, excerpt, content (textarea), category, featured_media_id, status, published_at
-
-### C8 — Jobs, Enquiries, FAQ (~20 min each)
-**Jobs** `apps/admin/app/jobs/` — list + create + view applications table
-**Enquiries** `apps/admin/app/enquiries/` — table + status update (new → responded → closed)
-**FAQ** `apps/admin/app/faq/` — list + create + sort_order drag or up/down buttons
+**Admin build: 18 routes, 0 TypeScript errors**
 
 ---
 
-## Module D: Community Pages (Public)
+---
 
-### D1 — Events Listing + Detail (~25 min)
-**Files:** `apps/web/app/community/events/page.tsx`, `.../[slug]/page.tsx`
-- Listing: only `is_approved = true`, filter by type
-- Detail: description, datetime, location, registration form (creates EventRegistration)
+## ✅ Module D — Community Pages (Complete)
 
-### D2 — Blog Listing + Article (~20 min)
-**Files:** `apps/web/app/community/blog/page.tsx`, `.../[slug]/page.tsx`
-- Published posts only, sorted by `published_at desc`, category filter tabs
-- Article: title, content, published date, category tag
-
-### D3 — Our Story Page (~15 min)
-**File:** `apps/web/app/community/our-story/page.tsx`
-- Timeline of TimelineEvent records ordered by sort_order
-- Placeholder if no data
-
-### D4 — Jobs + Careers (~20 min)
-**Files:** `apps/web/app/community/jobs/page.tsx`, `.../[slug]/page.tsx`
-- Active jobs (valid_through > today or null)
-- Application form → creates JobApplication
+- [x] D1 — Events: `/community/events` (filter by type) + `/community/events/[slug]` (registration form → EventRegistration)
+- [x] D2 — Blog: `/community/blog` (category filter) + `/community/blog/[slug]` (article view)
+- [x] D3 — Our Story: `/community/our-story` (timeline from DB, vertical line layout)
+- [x] D4 — Jobs: `/community/jobs` + `/community/jobs/[slug]` (application form → JobApplication)
 
 ---
 
-## Module E: Remaining Public Pages
+## ✅ Module E — Remaining Public Pages (Complete)
 
-### E1 — Contact / Enquiry Page (~15 min)
-**File:** `apps/web/app/contact/page.tsx`
-- Form: name, email, phone, message, intent
-- Submit → POST /api/enquiries (add new API route)
+- [x] E1 — Contact page `/contact` — form (name/email/phone/message/intent) → server action → prisma.enquiry.create
+- [x] E2 — Error boundary (`app/error.tsx`), loading state (`app/loading.tsx`), 404 (`app/not-found.tsx`)
+- [ ] E3 — Footer component extraction (inline footer still duplicated across pages — low priority)
+- [ ] E4 — Homepage community/testimonials section: replace placeholders with real DB data
 
-### E2 — Homepage Placeholder Replacements (~20 min)
-**File:** `apps/web/app/page.tsx`
-- Community section: real EventCard × 3 + BlogCard × 3 from DB
-- Testimonials section: real TestimonialCard × 4 from DB
-
-### E3 — Footer Component (~15 min)
-**File:** `apps/web/components/home/Footer.tsx`
-- Extract repeated footer into reusable component
-- Replace inline footers in /, /locations, /locations/[slug], /properties/[slug]
+---
 
 ---
 

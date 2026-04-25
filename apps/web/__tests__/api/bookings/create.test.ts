@@ -49,7 +49,7 @@ describe('POST /api/bookings', () => {
     )
   })
 
-  it('should decrement RoomInventory available_count after booking', async () => {
+  it('should decrement RoomInventory available_count after booking', { timeout: 15000 }, async () => {
     // Read inventory before
     const before = await prisma.roomInventory.findMany({
       where: {

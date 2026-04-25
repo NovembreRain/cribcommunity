@@ -9,11 +9,11 @@ const nextConfig: NextConfig = {
         hostname: 'qjjetqtzexiydyfqohih.supabase.co',
         pathname: '/storage/v1/object/public/**',
       },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: '**.unsplash.com' },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', '@crib/db'],
-  },
+  serverExternalPackages: ['@prisma/client', '@crib/db'],
 }
 
 export default nextConfig

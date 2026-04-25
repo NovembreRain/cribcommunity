@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Outfit, Playfair_Display } from 'next/font/google'
+import { AdminSidebar } from '@/components/AdminSidebar'
 import './globals.css'
 
 const outfit = Outfit({
@@ -35,7 +36,12 @@ export default function AdminLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background-dark text-text-high font-sans antialiased">
-        {children}
+        <div className="flex min-h-screen">
+          <AdminSidebar />
+          <main className="flex-1 min-w-0 overflow-auto">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   )

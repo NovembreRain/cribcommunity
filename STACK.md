@@ -1,7 +1,7 @@
 # Travellers Crib — Tech Stack, Conventions & Patterns
 
 > Reference for any AI model writing code for this project.
-> Last updated: 2026-04-12
+> Last updated: 2026-04-13
 
 ---
 
@@ -132,6 +132,50 @@ export async function GET(req: NextRequest) {
 
 All responses follow `{ data: T }` or `{ error: string }` envelope — never bare objects.
 
+### Server Action Pattern
+
+Used for admin CRUD and public form submissions (events registration, job applications, contact, bookings).
+
+```ts
+// apps/web/app/[path]/actions.ts  (or apps/admin/app/[path]/actions.ts)
+'use server'
+
+import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
+import { prisma } from '@crib/db'
+
+// Mutation with redirect:
+export async function createFoo(formData: FormData) {
+  const name = formData.get('name') as string
+  await prisma.foo.create({ data: { id: crypto.randomUUID(), name } })
+  redirect('/foo')
+}
+
+// Mutation with revalidate (no redirect — same page):
+export async function updateStatus(formData: FormData) {
+  const id = formData.get('id') as string
+  const status = formData.get('status') as string
+  await prisma.foo.update({ where: { id }, data: { status } })
+  revalidatePath('/foo')
+}
+
+// Bound action for edit pages (bind id before passing to form):
+export async function updateFoo(id: string, formData: FormData) { ... }
+// In page: const update = updateFoo.bind(null, id)
+// In form: <form action={update}>
+```
+
+**Inline server actions** (for delete buttons inside listing pages):
+```tsx
+// Inside a server component, pass to DeleteButton client component:
+<DeleteButton
+  action={async () => {
+    'use server'
+    await deleteFoo(item.id)
+  }}
+/>
+```
+
 ### Next.js 15 Async Params
 
 Dynamic route params are now a Promise — always await them:
@@ -169,6 +213,47 @@ apps/web/components/
   location/     LocationCard, PropertyCard, AmenityBadge, LucideIcon
   property/     RoomTypeCard, AvailabilityCalendar, BookingForm, PropertyBookingPanel
   ui/           shadcn/ui installed components (npx shadcn@latest add [name])
+
+apps/web/app/
+  /                           Homepage
+  /locations                  Location grid
+  /locations/[locationSlug]   Location detail with PropertyCards
+  /properties/[slug]          Property page with booking panel
+  /community/events           Events listing (filter by type)
+  /community/events/[slug]    Event detail + registration form
+  /community/blog             Blog listing (filter by category)
+  /community/blog/[slug]      Blog article
+  /community/our-story        Timeline page
+  /community/jobs             Jobs listing
+  /community/jobs/[slug]      Job detail + application form
+  /contact                    Contact / enquiry form
+  /api/amenities              GET + POST amenities
+  /api/bookings               POST create booking
+  /api/bookings/availability  GET check availability
+  /api/properties/[slug]      GET property + room types
+
+apps/admin/app/
+  /                           Dashboard (stat cards + recent bookings)
+  /locations                  Location list + delete
+  /locations/new              Create location form
+  /locations/[id]/edit        Edit location form
+  /properties                 Property list + delete
+  /properties/new             Create property form
+  /properties/[id]/edit       Edit property form
+  /bookings                   Bookings table + status update
+  /events                     Events approve/revoke
+  /blog                       Blog post list + publish/unpublish
+  /blog/new                   New post form
+  /jobs                       Job listings + delete
+  /jobs/new                   Post new job
+  /enquiries                  Enquiry table + status update
+  /faq                        FAQ list (grouped by category)
+  /faq/new                    New FAQ form
+  /users                      Users table (read-only)
+
+apps/admin/components/
+  AdminSidebar.tsx            10-item nav sidebar with active state
+  DeleteButton.tsx            Client confirm-then-delete button
 
 packages/ui/src/  Shared components used by both web + admin
 ```
@@ -380,3 +465,9 @@ RLS is currently disabled on all tables. Enable before production.
 | Mocking the database in tests | Real Supabase integration tests only |
 | Animating `width`/`height` | Only `opacity` + `transform` (Framer Motion) |
 | Creating a new component without checking packages/ui | Check `packages/ui/src/` first |
+| `experimental.serverComponentsExternalPackages` in next.config.ts | Use `serverExternalPackages` (top-level, not experimental) — both apps already updated |
+| Tuple array type inference in TSX `[label, href].map(([l, h]) =>` | Cast: `(arr as [string, string][]).map(([l, h]) =>` |
+| Running `npx prisma` at repo root | A global Prisma 7 shadows the project's v5. Always use `packages/db/node_modules/.bin/prisma` or `pnpm --filter @crib/db exec prisma` |
+| Symlinks for `.env` in monorepo | Write real `.env` files into each app dir (`apps/web/.env`, `apps/admin/.env`) — Next.js doesn't follow symlinks reliably |
+| Server action in `actions.ts` — forgetting `'use server'` at top | All action files must start with `'use server'` |
+| Inline server action passed to client component | `async () => { 'use server'; await foo() }` inside server component is valid |
