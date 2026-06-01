@@ -12,17 +12,21 @@ export async function submitEnquiry(formData: FormData) {
 
   if (!name || !email || !message) return
 
-  await prisma.enquiry.create({
-    data: {
-      id: crypto.randomUUID(),
-      name,
-      email,
-      phone: phone || null,
-      message,
-      intent: intent || null,
-      source: 'web',
-    },
-  })
+  try {
+    await prisma.enquiry.create({
+      data: {
+        id: crypto.randomUUID(),
+        name,
+        email,
+        phone: phone || null,
+        message,
+        intent: intent || null,
+        source: 'web',
+      },
+    })
+  } catch {
+    redirect('/contact?error=true')
+  }
 
   redirect('/contact?sent=true')
 }
