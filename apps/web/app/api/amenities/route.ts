@@ -18,11 +18,11 @@ export async function GET() {
     orderBy: [{ category: 'asc' }, { name: 'asc' }],
   })
 
-  const popular = amenities.filter((a) => a.is_popular)
+  const popular = amenities.filter(({ is_popular }) => is_popular)
   // All amenities sorted: popular first, then by category
   const all = [
-    ...amenities.filter((a) => a.is_popular),
-    ...amenities.filter((a) => !a.is_popular),
+    ...amenities.filter(({ is_popular }) => is_popular),
+    ...amenities.filter(({ is_popular }) => !is_popular),
   ]
 
   return NextResponse.json({ data: { popular, all } })
