@@ -1,6 +1,6 @@
 import { type Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import { prisma } from '@crib/db'
 import { formatDateTime } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
@@ -15,11 +15,15 @@ export const metadata: Metadata = {
 }
 export const dynamic = 'force-dynamic'
 
-const EVENT_TYPE_STYLES: Record<string, string> = {
-  social:    'bg-blue-500/15 text-blue-400 border-blue-500/20',
-  workshop:  'bg-primary/15 text-primary border-primary/20',
-  music:     'bg-purple-500/15 text-purple-400 border-purple-500/20',
-  wellness:  'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
+// Use design-system tokens only — no hardcoded tailwind colours
+const EVENT_TYPE_STYLES: Record<string, { badge: string; dot: string }> = {
+  social:   { badge: 'bg-primary/10 text-primary border-primary/20',         dot: 'bg-primary' },
+  workshop: { badge: 'bg-gold-border/20 text-text-medium border-gold-border/30', dot: 'bg-gold-border' },
+  music:    { badge: 'bg-white/10 text-text-high border-white/15',            dot: 'bg-white/60' },
+  wellness: { badge: 'bg-primary/10 text-primary border-primary/15',          dot: 'bg-primary/70' },
+}
+const TYPE_LABELS: Record<string, string> = {
+  social: 'Social', workshop: 'Workshop', music: 'Music', wellness: 'Wellness',
 }
 
 export default async function EventsPage({
@@ -30,23 +34,20 @@ export default async function EventsPage({
   const { type } = await searchParams
 
   const [events, faqs] = await Promise.all([
-  prisma.event.findMany({
-    where: {
-      is_approved: true,
-      ...(type ? { type } : {}),
-    },
-    orderBy: { start_datetime: 'asc' },
-    include: {
-      location: { select: { name: true, city: true } },
-      _count: { select: { registrations: true } },
-    },
-  }),
-  prisma.fAQ.findMany({ where: { context: 'events' }, orderBy: { sort_order: 'asc' } }),
-])
+    prisma.event.findMany({
+      where: { is_approved: true, ...(type ? { type } : {}) },
+      orderBy: { start_datetime: 'asc' },
+      include: {
+        location: { select: { name: true, city: true } },
+        _count: { select: { registrations: true } },
+      },
+    }),
+    prisma.fAQ.findMany({ where: { context: 'events' }, orderBy: { sort_order: 'asc' } }),
+  ])
 
   const eventTypes = ['social', 'workshop', 'music', 'wellness']
   const upcoming = events.filter((e) => e.start_datetime >= new Date())
-  const past = events.filter((e) => e.start_datetime < new Date())
+  const past     = events.filter((e) => e.start_datetime < new Date())
 
   return (
     <main className="min-h-screen bg-background-dark">
@@ -59,55 +60,59 @@ export default async function EventsPage({
         description="Connect with travellers, learn something new, or just vibe — there's always something happening."
         className="bg-background-dark pt-0"
       >
-        {/* Type filter tabs */}
+        {/* Filter tabs */}
         <div className="flex items-center gap-2 mb-10 flex-wrap">
-          <Link
-            href="/community/events"
-            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] border transition-colors ${
-              !type
-                ? 'bg-primary text-white border-primary'
-                : 'glass-panel border-gold-border/20 text-text-low hover:text-text-medium'
-            }`}
-          >
-            All
-          </Link>
-          {eventTypes.map((t) => (
+          {[null, ...eventTypes].map((t) => (
             <Link
-              key={t}
-              href={`/community/events?type=${t}`}
+              key={t ?? 'all'}
+              href={t ? `/community/events?type=${t}` : '/community/events'}
               className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] border transition-colors ${
-                type === t
-                  ? 'bg-primary text-white border-primary'
-                  : 'glass-panel border-gold-border/20 text-text-low hover:text-text-medium'
+                (!type && !t) || type === t
+                  ? 'bg-primary text-white border-primary shadow-glow'
+                  : 'glass-panel border-gold-border/20 text-text-low hover:text-text-medium hover:border-primary/20'
               }`}
             >
-              {t}
+              {t ? (TYPE_LABELS[t] ?? t) : 'All'}
             </Link>
           ))}
         </div>
 
         {events.length === 0 ? (
-          <div className="glass-panel rounded-2xl p-12 text-center border border-gold-border/20">
-            <p className="text-text-low">No events found{type ? ` for "${type}"` : ''}.</p>
+          <div className="glass-panel rounded-2xl p-16 text-center border border-gold-border/10">
+            <p className="text-text-low text-sm">
+              No events found{type ? ` for "${TYPE_LABELS[type] ?? type}"` : ''}.
+            </p>
+            {type && (
+              <Link href="/community/events" className="text-primary text-xs hover:underline mt-3 inline-block">
+                View all events →
+              </Link>
+            )}
           </div>
         ) : (
-          <div className="space-y-10">
+          <div className="space-y-12">
             {upcoming.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-xs uppercase tracking-[0.15em] text-text-low font-medium">Upcoming</h3>
+              <div className="space-y-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-text-low font-bold flex items-center gap-3">
+                  <span className="w-6 h-[1px] bg-primary/40" />
+                  Upcoming
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {upcoming.map((event) => (
-                    <EventCard key={event.id} event={event} />
+                  {upcoming.map((event, i) => (
+                    <EventCard key={event.id} event={event} delay={i} />
                   ))}
                 </div>
               </div>
             )}
+
             {past.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-xs uppercase tracking-[0.15em] text-text-low font-medium">Past Events</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
-                  {past.map((event) => (
-                    <EventCard key={event.id} event={event} />
+              <div className="space-y-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-text-low font-bold flex items-center gap-3">
+                  <span className="w-6 h-[1px] bg-white/15" />
+                  Past Events
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-50">
+                  {past.map((event, i) => (
+                    <EventCard key={event.id} event={event} delay={i} />
                   ))}
                 </div>
               </div>
@@ -116,9 +121,7 @@ export default async function EventsPage({
         )}
       </SectionShell>
 
-      {faqs.length > 0 && (
-        <FAQSection faqs={faqs} title="Events FAQ" />
-      )}
+      {faqs.length > 0 && <FAQSection faqs={faqs} title="Events FAQ" />}
       <Footer />
     </main>
   )
@@ -126,56 +129,85 @@ export default async function EventsPage({
 
 function EventCard({
   event,
+  delay,
 }: {
   event: {
     id: string
     name: string
     slug: string
     type: string
+    images: unknown
     start_datetime: Date
     end_datetime: Date
     description: string | null
     location: { name: string; city: string }
     _count: { registrations: number }
   }
+  delay: number
 }) {
-  const isPast = event.start_datetime < new Date()
-  const style = EVENT_TYPE_STYLES[event.type] ?? 'bg-white/10 text-text-low border-white/10'
+  const style = EVENT_TYPE_STYLES[event.type] ?? {
+    badge: 'bg-white/10 text-text-low border-white/10',
+    dot: 'bg-white/40',
+  }
+  const images = Array.isArray(event.images) ? (event.images as string[]) : []
+  const coverImage = images[0] ?? null
 
   return (
     <Link
       href={`/community/events/${event.slug}`}
-      className="glass-panel rounded-2xl border border-gold-border/20 hover:border-primary/30 transition-colors p-6 space-y-4 block group"
+      className="glass-panel rounded-2xl border border-gold-border/15 hover:border-primary/30 transition-all duration-300 overflow-hidden group block hover:-translate-y-0.5 hover:shadow-glow"
+      style={{ animationDelay: `${delay * 0.06}s` }}
     >
-      <div className="flex items-start justify-between gap-3">
-        <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${style}`}>
-          {event.type}
-        </span>
-        {isPast && (
-          <span className="text-text-low text-xs">Past</span>
+      {/* Cover image */}
+      <div className="relative h-44 bg-surface-dark overflow-hidden">
+        {coverImage ? (
+          <Image
+            src={coverImage}
+            alt={event.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-surface-dark to-background-dark flex items-end p-4">
+            <span className="text-gold-border/20 font-display text-6xl italic leading-none">
+              {event.name[0]}
+            </span>
+          </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/60 to-transparent" />
+        {/* Type badge over image */}
+        <div className="absolute top-3 left-3">
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ${style.badge}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
+            {TYPE_LABELS[event.type] ?? event.type}
+          </span>
+        </div>
       </div>
-      <div>
-        <h3 className="font-display text-lg text-text-high group-hover:text-primary transition-colors">{event.name}</h3>
+
+      {/* Card body */}
+      <div className="p-5 space-y-3">
+        <h3 className="font-display text-lg text-text-high group-hover:text-primary transition-colors leading-tight line-clamp-2">
+          {event.name}
+        </h3>
         {event.description && (
-          <p className="text-text-low text-sm mt-1 line-clamp-2">{event.description}</p>
+          <p className="text-text-low text-sm leading-relaxed line-clamp-2">{event.description}</p>
         )}
-      </div>
-      <div className="space-y-1.5 text-xs text-text-low">
-        <p className="flex items-center gap-2">
-          <Calendar size={12} className="text-primary/60 shrink-0" />
-          {formatDateTime(event.start_datetime)}
-        </p>
-        <p className="flex items-center gap-2">
-          <MapPin size={12} className="text-primary/60 shrink-0" />
-          {event.location.name} · {event.location.city}
-        </p>
-        <p className="flex items-center gap-2">
-          <Users size={12} className="text-primary/60 shrink-0" />
-          {event._count.registrations} registered
-        </p>
+        <div className="space-y-1.5 pt-1 border-t border-gold-border/10">
+          <p className="flex items-center gap-2 text-xs text-text-low">
+            <Calendar size={11} className="text-primary/60 shrink-0" />
+            {formatDateTime(event.start_datetime)}
+          </p>
+          <p className="flex items-center gap-2 text-xs text-text-low">
+            <MapPin size={11} className="text-primary/60 shrink-0" />
+            {event.location.name} · {event.location.city}
+          </p>
+          <p className="flex items-center gap-2 text-xs text-text-low">
+            <Users size={11} className="text-primary/60 shrink-0" />
+            {event._count.registrations} registered
+          </p>
+        </div>
       </div>
     </Link>
   )
 }
-

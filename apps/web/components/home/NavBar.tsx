@@ -56,7 +56,7 @@ export function NavBar() {
       <nav
         className={cn(
           'flex items-center justify-between px-6 py-4 rounded-full border border-white/5 transition-all duration-300',
-          scrolled ? 'bg-background-dark/90 backdrop-blur-md shadow-glass' : 'glass-panel'
+          scrolled ? 'bg-background-dark/90 backdrop-blur-md shadow-card' : 'glass-panel'
         )}
       >
         {/* Logo */}
@@ -89,7 +89,7 @@ export function NavBar() {
             </button>
 
             {communityOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 bg-background-dark/95 backdrop-blur-md border border-gold-border/20 rounded-2xl shadow-glass overflow-hidden">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 bg-background-dark/95 backdrop-blur-md border border-gold-border/20 rounded-2xl shadow-card overflow-hidden">
                 <div className="p-2">
                   {COMMUNITY_LINKS.map(({ label, href, desc }) => (
                     <Link
@@ -137,7 +137,7 @@ export function NavBar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden mt-2 bg-background-dark/95 backdrop-blur-md border border-gold-border/20 rounded-2xl shadow-glass overflow-hidden">
+        <div className="md:hidden mt-2 bg-background-dark/95 backdrop-blur-md border border-gold-border/20 rounded-2xl shadow-card overflow-hidden">
           <div className="p-4 space-y-1">
             <MobileLink href="/" label="Home" />
             <MobileLink href="/locations" label="Stay" />

@@ -49,7 +49,7 @@ export function RoomTypeCard({ roomType, isSelected = false, onSelectRoom }: Roo
     >
       {/* Image gallery */}
       <div
-        className="relative aspect-[16/9] bg-surface-dark overflow-hidden group"
+        className="relative h-52 bg-surface-dark overflow-hidden group"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
