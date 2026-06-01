@@ -66,13 +66,14 @@ export default async function PropertyPage({ params }: Props) {
   })
   const heroImage = allImages[0] ?? null
 
-  // Shape room types for the booking panel (flatten amenities)
+  // Shape room types for the booking panel (flatten amenities + pass images)
   const roomTypes = property.room_types.map((rt) => ({
     id: rt.id,
     name: rt.name,
     description: rt.description,
     capacity: rt.capacity,
     price_per_night: rt.price_per_night,
+    images: Array.isArray(rt.images) ? (rt.images as string[]) : [],
     amenities: rt.amenities
       .map((rta) => rta.amenity)
       .sort((a, b) => {
