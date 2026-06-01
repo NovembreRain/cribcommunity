@@ -15,7 +15,8 @@ export async function adminLogin(formData: FormData) {
   const cookieStore = await cookies()
   cookieStore.set('crib_admin_session', secret, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // secure requires HTTPS — keep false until a domain + SSL cert is added
+    secure: false,
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: '/',
