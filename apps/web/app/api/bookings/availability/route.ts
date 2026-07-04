@@ -31,13 +31,11 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  const todayUTC = new Date(new Date().toISOString().split('T')[0] + 'T00:00:00.000Z')
-  if (checkIn < todayUTC) {
-    return NextResponse.json(
-      { error: 'check_in cannot be in the past' },
-      { status: 400 },
-    )
-  }
+  // No past-date rejection here: this endpoint serves read-only inventory
+  // lookups for a date window (e.g. the calendar fetching a whole month,
+  // whose window naturally starts before "today" after the 1st). The
+  // "check-in can't be in the past" business rule belongs to actual booking
+  // creation, enforced in POST /api/bookings.
 
   const roomType = await prisma.roomType.findUnique({
     where: { id: room_type_id },

@@ -98,18 +98,23 @@ describe('GET /api/bookings/availability', () => {
     expect(body.error).toBe('check_out must be after check_in')
   })
 
-  it('should return 400 when check_in is a past date', async () => {
+  it('should return 200 for a window that starts in the past (calendar month browsing)', async () => {
+    // The calendar fetches a whole month at a time, so check_in is often
+    // "the 1st of this month" — which is before today on every day but the 1st.
+    // This must succeed (with past dates simply reported as 0 availability),
+    // since the "no past check-in" rule only applies to actual booking creation.
     const yesterday = daysFromNowStr(-1)
-    const dayAfterYesterday = daysFromNowStr(0) // today
+    const today = daysFromNowStr(0)
     const req = makeRequest({
       room_type_id: testData.roomType.id,
       check_in: yesterday,
-      check_out: dayAfterYesterday,
+      check_out: today,
     })
     const res = await GET(req)
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body.error).toBe('check_in cannot be in the past')
+    expect(body.data.dates).toHaveLength(1)
+    expect(body.data.dates[0].date).toBe(yesterday)
   })
 
   it('should return correct total_amount (nights × price_per_night)', async () => {

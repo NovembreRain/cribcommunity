@@ -17,6 +17,12 @@ function makePostRequest(body: Record<string, unknown>) {
   })
 }
 
+function daysFromNowStr(n: number): string {
+  const d = new Date()
+  d.setUTCDate(d.getUTCDate() + n)
+  return d.toISOString().split('T')[0] as string
+}
+
 describe('POST /api/bookings', () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   let testData!: TestBookingData
@@ -178,6 +184,21 @@ describe('POST /api/bookings', () => {
     expect(res.status).toBe(400)
     const body = await res.json()
     expect(body.error).toBe('Room type not found for this property')
+  })
+
+  it('should return 400 when check_in_date is in the past', async () => {
+    const req = makePostRequest({
+      property_id: testData.property.id,
+      room_type_id: testData.roomType.id,
+      guest_name: 'Past Date Guest',
+      guest_email: 'test-past-date@example.com',
+      check_in_date: daysFromNowStr(-1),
+      check_out_date: daysFromNowStr(1),
+    })
+    const res = await POST(req)
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toBe('check_in_date cannot be in the past')
   })
 
   it('should return 400 when required fields are missing', async () => {
