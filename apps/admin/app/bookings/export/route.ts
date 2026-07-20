@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@crib/db'
 
+// created_at is stored in UTC — build month boundaries in UTC too, or a
+// non-UTC server timezone would put bookings near midnight in the wrong month.
 function buildMonthRange(month: string): { gte: Date; lte: Date } | undefined {
   if (!month) return undefined
   const [y, m] = month.split('-').map(Number)
   if (!y || !m) return undefined
-  return { gte: new Date(y, m - 1, 1), lte: new Date(y, m, 0, 23, 59, 59) }
+  return { gte: new Date(Date.UTC(y, m - 1, 1)), lte: new Date(Date.UTC(y, m, 0, 23, 59, 59)) }
 }
 
 function escape(v: unknown): string {

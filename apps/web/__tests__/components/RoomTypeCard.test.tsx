@@ -10,6 +10,7 @@ const BASE_ROOM = {
   name: '6-Bed Mixed Dorm',
   capacity: 6,
   price_per_night: 799,
+  images: [],
   amenities: [
     { name: 'WiFi', icon: 'wifi' },
     { name: 'Hot Shower', icon: 'shower-head' },
@@ -29,7 +30,7 @@ describe('RoomTypeCard', () => {
     expect(screen.getByText(/799/)).toBeDefined()
   })
 
-  it('renders all 6 amenity pills when count is exactly 6', () => {
+  it('renders all 6 amenity pills when count is under the 8 visible max', () => {
     render(<RoomTypeCard roomType={BASE_ROOM} onSelectRoom={vi.fn()} />)
     expect(screen.getByText('WiFi')).toBeDefined()
     expect(screen.getByText('Hot Shower')).toBeDefined()
@@ -37,17 +38,19 @@ describe('RoomTypeCard', () => {
     expect(screen.queryByText(/\+ \d+ more/)).toBeNull()
   })
 
-  it('shows "+N more" badge when amenities exceed 6', () => {
+  it('shows "+N more" badge when amenities exceed 8', () => {
     const room = {
       ...BASE_ROOM,
       amenities: [
         ...BASE_ROOM.amenities,
         { name: 'Breakfast', icon: 'coffee' },
         { name: 'Bar', icon: 'beer' },
+        { name: 'Rooftop', icon: 'sun' },
+        { name: 'Bike Rental', icon: 'bike' },
       ],
     }
     render(<RoomTypeCard roomType={room} onSelectRoom={vi.fn()} />)
-    // First 6 visible, 2 hidden → "+2 more"
+    // First 8 visible, 2 hidden → "+2 more"
     expect(screen.getByText('+2 more')).toBeDefined()
   })
 

@@ -5,6 +5,7 @@ import { truncate } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
 import { SectionShell } from '@/components/home/SectionShell'
 import { PropertyCard } from '@/components/location/PropertyCard'
+import { LocationGallery } from '@/components/location/LocationGallery'
 import { Footer } from '@/components/home/Footer'
 import { FAQSection } from '@/components/home/FAQSection'
 
@@ -98,6 +99,7 @@ export default async function LocationDetailPage({ params }: Props) {
   })
 
   const heroImage = propertyCards[0]?.image ?? null
+  const galleryImages = Array.isArray(location.images) ? (location.images as string[]) : []
 
   return (
     <main className="min-h-screen bg-background-dark">
@@ -133,6 +135,17 @@ export default async function LocationDetailPage({ params }: Props) {
           )}
         </div>
       </div>
+
+      {galleryImages.length > 0 && (
+        <SectionShell
+          eyebrow="Gallery"
+          title={`${location.name} in Photos`}
+          description="A look at the everyday moments and spaces that make this place home."
+          className="bg-background-dark"
+        >
+          <LocationGallery images={galleryImages} locationName={location.name} />
+        </SectionShell>
+      )}
 
       {/* Properties grid */}
       <SectionShell

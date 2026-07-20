@@ -19,6 +19,10 @@ interface BookingFormProps {
   pricePerNight: number
   selectedRange: SelectedRange | null
   onSuccess: (bookingId: string) => void
+  /** Called when the server rejects the selected dates (e.g. inventory ran out
+   *  between selection and submit) — parent should clear the stale selection
+   *  and force the calendar to refetch fresh availability. */
+  onInvalidRange?: () => void
 }
 
 const guestSchema = z.object({
@@ -37,6 +41,7 @@ export function BookingForm({
   pricePerNight,
   selectedRange,
   onSuccess,
+  onInvalidRange,
 }: BookingFormProps) {
   const [fields, setFields] = useState<GuestFields>({
     guest_name: '',
@@ -46,6 +51,7 @@ export function BookingForm({
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [submitting, setSubmitting] = useState(false)
   const [apiError, setApiError] = useState<string | null>(null)
+  const [rangeInvalid, setRangeInvalid] = useState(false)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
@@ -57,7 +63,7 @@ export function BookingForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!selectedRange) return
+    if (!selectedRange || rangeInvalid) return
 
     // Client-side validation
     const parsed = guestSchema.safeParse(fields)
@@ -96,6 +102,9 @@ export function BookingForm({
 
       if (!res.ok) {
         setApiError(body.error ?? 'Booking failed. Please try again.')
+        // The dates were valid when picked but got booked out from under us —
+        // block retrying the same doomed range; the user must pick fresh dates.
+        if (res.status === 409) setRangeInvalid(true)
         return
       }
 
@@ -205,16 +214,26 @@ export function BookingForm({
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className={cn(
-          'btn-primary w-full',
-          submitting && 'opacity-60 cursor-not-allowed hover:shadow-glow',
-        )}
-      >
-        {submitting ? 'Confirming...' : 'Confirm Booking'}
-      </button>
+      {rangeInvalid ? (
+        <button
+          type="button"
+          onClick={() => onInvalidRange?.()}
+          className="btn-secondary w-full"
+        >
+          Choose Different Dates
+        </button>
+      ) : (
+        <button
+          type="submit"
+          disabled={submitting}
+          className={cn(
+            'btn-primary w-full',
+            submitting && 'opacity-60 cursor-not-allowed hover:shadow-glow',
+          )}
+        >
+          {submitting ? 'Confirming...' : 'Confirm Booking'}
+        </button>
+      )}
     </form>
   )
 }

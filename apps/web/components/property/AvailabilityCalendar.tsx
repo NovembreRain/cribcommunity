@@ -113,7 +113,9 @@ export function AvailabilityCalendar({
     if (checkIn && !checkOut && hovered && dateStr > checkIn && dateStr <= hovered)
       return 'in-range'
     const count = availability[dateStr]
-    if (count === 0) return 'unavailable'
+    // Undefined means we have no confirmed inventory data for this date yet —
+    // never render it as bookable just because it's absent from the map.
+    if (count === undefined || count === 0) return 'unavailable'
     return 'available'
   }
 

@@ -36,6 +36,7 @@ export function PropertyBookingPanel({ propertyId, roomTypes }: PropertyBookingP
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null)
   const [selectedRange, setSelectedRange] = useState<SelectedRange | null>(null)
   const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null)
+  const [calendarKey, setCalendarKey] = useState(0)
 
   const selectedRoom = roomTypes.find((rt) => rt.id === selectedRoomId) ?? null
 
@@ -44,6 +45,13 @@ export function PropertyBookingPanel({ propertyId, roomTypes }: PropertyBookingP
     setSelectedRoomId(id)
     setSelectedRange(null)
     setConfirmedBookingId(null)
+  }
+
+  function handleInvalidRange() {
+    // Server rejected the selection after the fact — clear it and force the
+    // calendar to remount so it refetches instead of showing stale dates.
+    setSelectedRange(null)
+    setCalendarKey((k) => k + 1)
   }
 
   function handleRangeSelect(checkIn: string, checkOut: string, totalAmount: number) {
@@ -194,6 +202,7 @@ export function PropertyBookingPanel({ propertyId, roomTypes }: PropertyBookingP
 
               {/* Calendar */}
               <AvailabilityCalendar
+                key={`${selectedRoom.id}-${calendarKey}`}
                 roomTypeId={selectedRoom.id}
                 pricePerNight={selectedRoom.price_per_night}
                 onRangeSelect={handleRangeSelect}
@@ -215,6 +224,7 @@ export function PropertyBookingPanel({ propertyId, roomTypes }: PropertyBookingP
                       pricePerNight={selectedRoom.price_per_night}
                       selectedRange={selectedRange}
                       onSuccess={setConfirmedBookingId}
+                      onInvalidRange={handleInvalidRange}
                     />
                   </motion.div>
                 )}

@@ -1,11 +1,21 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  // Load .env from repo root so DATABASE_URL is available for action tests
+  envDir: path.resolve(__dirname, '../..'),
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, '.'),
+      '@test-helpers': path.resolve(__dirname, '../../packages/db/test-helpers'),
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
+    setupFiles: ['__tests__/setup.ts'],
     include: ['**/*.test.{ts,tsx}'],
     exclude: ['node_modules', '.next'],
   },

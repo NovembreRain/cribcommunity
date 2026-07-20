@@ -16,15 +16,22 @@ const STATUS_STYLES: Record<string, string> = {
   checked_in:  'bg-blue-500/15 text-blue-400 border-blue-500/20',
   checked_out: 'bg-text-low/15 text-text-low border-text-low/20',
 }
+const PAYMENT_STATUS_STYLES: Record<string, string> = {
+  paid:     'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
+  pending:  'bg-amber-500/15 text-amber-400 border-amber-500/20',
+  refunded: 'bg-blue-500/15 text-blue-400 border-blue-500/20',
+}
 
 const LIMIT_OPTIONS = [20, 50, 100, 'all'] as const
 
+// created_at is stored in UTC — build month boundaries in UTC too, or a
+// non-UTC server timezone would put bookings near midnight in the wrong month.
 function buildMonthRange(month: string): { gte: Date; lte: Date } | undefined {
   if (!month) return undefined
   const [y, m] = month.split('-').map(Number)
   if (!y || !m) return undefined
-  const gte = new Date(y, m - 1, 1)
-  const lte = new Date(y, m, 0, 23, 59, 59)
+  const gte = new Date(Date.UTC(y, m - 1, 1))
+  const lte = new Date(Date.UTC(y, m, 0, 23, 59, 59))
   return { gte, lte }
 }
 
@@ -175,14 +182,14 @@ export default async function BookingsPage({
                     <p className="text-text-low text-xs">{b.room_type.name}</p>
                   </td>
                   <td className="px-4 py-3 text-text-low text-xs">
-                    <p>{formatDate(b.check_in_date)}</p>
-                    <p>→ {formatDate(b.check_out_date)}</p>
+                    <p>{formatDate(b.check_in_date, { timeZone: 'UTC' })}</p>
+                    <p>→ {formatDate(b.check_out_date, { timeZone: 'UTC' })}</p>
                   </td>
                   <td className="px-4 py-3 text-text-high font-medium">
                     {formatCurrency(b.total_amount, 'INR', 'en-IN')}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[b.payment_status] ?? 'bg-white/10 text-text-low border-white/10'}`}>
+                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${PAYMENT_STATUS_STYLES[b.payment_status] ?? 'bg-white/10 text-text-low border-white/10'}`}>
                       {b.payment_status}
                     </span>
                   </td>
