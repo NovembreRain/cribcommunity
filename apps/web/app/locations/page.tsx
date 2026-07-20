@@ -9,9 +9,9 @@ import { Footer } from '@/components/home/Footer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Our Locations',
+  title: 'Hostels in Auroville',
   description:
-    'Explore all Crib Community hostel destinations — from Goa beaches to Himalayan peaks.',
+    'Explore Crib Community\'s boutique hostels in Auroville, Tamil Nadu — Travellers Crib and Purity Stays, both a short ride from the Matrimandir.',
 }
 
 export default async function LocationsPage() {

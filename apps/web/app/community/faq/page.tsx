@@ -4,10 +4,11 @@ import { NavBar } from '@/components/home/NavBar'
 import { Footer } from '@/components/home/Footer'
 import { SectionShell } from '@/components/home/SectionShell'
 import { FAQSection } from '@/components/home/FAQSection'
+import { JsonLd } from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: 'FAQ — Crib Community',
-  description: 'Everything you need to know about staying at Crib Community.',
+  title: 'FAQ',
+  description: 'Everything you need to know about booking, checking in, and hosting events at Crib Community\'s Travellers Crib and Purity Stays in Auroville.',
 }
 export const dynamic = 'force-dynamic'
 
@@ -33,15 +34,27 @@ export default async function FAQPage() {
 
   const contextOrder = ['booking', 'property', 'location', 'events', 'careers', 'general']
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  }
+
   return (
     <main className="min-h-screen bg-background-dark">
+      <JsonLd data={faqSchema} />
       <NavBar />
       <div className="pt-32" />
 
       <SectionShell
         eyebrow="Help"
         title="Frequently Asked Questions"
-        description="Everything you need to know about Crib Community — stays, bookings, and life at the hostel."
+        titleAs="h1"
+        description="Everything you need to know about Crib Community — stays, bookings, and life at our Auroville hostels."
         className="bg-background-dark pt-0"
       >
         {faqs.length === 0 ? (

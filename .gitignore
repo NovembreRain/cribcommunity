@@ -28,6 +28,10 @@ coverage/
 # Misc
 .DS_Store
 *.pem
+
+# Source photo assets (uploaded to Supabase storage, not tracked in git)
+MediaPhotos/
+imagescrape/
 .vercel
 *.log
 npm-debug.log*

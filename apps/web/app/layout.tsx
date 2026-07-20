@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Outfit, Playfair_Display } from 'next/font/google'
+import { JsonLd } from '@/components/JsonLd'
 import './globals.css'
 
 const outfit = Outfit({
@@ -31,6 +32,25 @@ export const metadata: Metadata = {
   },
 }
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Crib Community',
+  url: APP_URL,
+  description:
+    'Crib Community is a curated collective of boutique hostels in Auroville, Tamil Nadu — Travellers Crib and Purity Stays.',
+  sameAs: [],
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Crib Community',
+  url: APP_URL,
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -43,6 +63,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background-dark text-text-high font-sans antialiased">
+        <JsonLd data={organizationSchema} />
+        <JsonLd data={websiteSchema} />
         {children}
       </body>
     </html>

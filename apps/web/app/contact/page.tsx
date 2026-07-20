@@ -6,8 +6,8 @@ import { submitEnquiry } from './actions'
 import { Footer } from '@/components/home/Footer'
 
 export const metadata: Metadata = {
-  title: 'Contact — Crib Community',
-  description: 'Get in touch with Crib Community — bookings, partnerships, or just to say hello.',
+  title: 'Contact Us',
+  description: 'Get in touch with Crib Community — booking questions, workshop hosting, or just to say hello. We\'re based in Auroville, Tamil Nadu.',
 }
 
 export default async function ContactPage({
@@ -110,7 +110,7 @@ export default async function ContactPage({
                   <MapPin size={16} className="text-primary mt-0.5 shrink-0" />
                   <div>
                     <p className="text-text-low text-xs uppercase tracking-[0.1em] mb-1">Locations</p>
-                    <p className="text-text-medium">Goa · Manali · Rishikesh</p>
+                    <p className="text-text-medium">Auroville, Tamil Nadu</p>
                   </div>
                 </div>
               </div>

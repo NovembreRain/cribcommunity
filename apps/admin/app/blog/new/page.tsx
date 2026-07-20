@@ -39,6 +39,12 @@ export default async function NewBlogPostPage() {
         <Field label="Excerpt" name="excerpt" textarea placeholder="Short description shown in listings…" />
         <Field label="Content *" name="content" textarea placeholder="Write your post in plain text or markdown…" rows={12} />
 
+        <div className="grid grid-cols-1 gap-4 border-t border-gold-border/10 pt-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-text-low font-bold">SEO</p>
+          <Field label="Meta Title" name="meta_title" placeholder="Falls back to the post title if left blank" />
+          <Field label="Meta Description" name="meta_description" textarea placeholder="~150-160 characters shown in search results" rows={2} />
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label htmlFor="category_id" className="text-xs text-text-low uppercase tracking-[0.1em] font-medium">

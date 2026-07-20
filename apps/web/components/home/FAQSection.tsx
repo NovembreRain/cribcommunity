@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { JsonLd } from '@/components/JsonLd'
 
 interface FAQ { id: string; question: string; answer: string }
 
@@ -11,8 +12,19 @@ export function FAQSection({ faqs, title = 'Frequently Asked Questions' }: { faq
 
   if (faqs.length === 0) return null
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  }
+
   return (
     <section className="max-w-2xl mx-auto px-6 py-16">
+      <JsonLd data={faqSchema} />
       <h2 className="text-xs uppercase tracking-[0.2em] text-primary font-bold mb-2 flex items-center gap-3">
         <span className="w-8 h-[2px] bg-gradient-to-r from-primary to-transparent" />
         {title}

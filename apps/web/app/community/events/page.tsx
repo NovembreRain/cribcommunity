@@ -10,8 +10,8 @@ import { Footer } from '@/components/home/Footer'
 import { FAQSection } from '@/components/home/FAQSection'
 
 export const metadata: Metadata = {
-  title: 'Events — Crib Community',
-  description: 'Workshops, music nights, wellness sessions and community gatherings across all Crib locations.',
+  title: 'Events & Workshops in Auroville',
+  description: 'Movie nights, music circles, and workshops at Crib Community\'s Auroville hostels — host your own workshop and your stay is free.',
 }
 export const dynamic = 'force-dynamic'
 
@@ -57,9 +57,29 @@ export default async function EventsPage({
       <SectionShell
         eyebrow="Experience"
         title="Events & Gatherings"
+        titleAs="h1"
         description="Connect with travellers, learn something new, or just vibe — there's always something happening."
         className="bg-background-dark pt-0"
       >
+        {/* Host-a-workshop invite */}
+        <div className="glass-panel rounded-2xl border border-gold-border/15 p-8 md:p-10 mb-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
+          <div className="flex-1 space-y-2">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary font-bold">Our Common Area, Your Stage</p>
+            <h3 className="font-display text-2xl md:text-3xl text-text-high leading-snug">
+              Movie nights, music circles, workshops that go past midnight.
+            </h3>
+            <p className="text-text-medium text-sm leading-relaxed max-w-2xl">
+              The common area at Travellers Crib is where strangers become the tribe — projector screenings under the stars, jam sessions, skill-shares that start as a favour and end as a tradition. Got something to teach — yoga, music, cooking, a craft only you know? Host a workshop with us and your stay is on the house.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="shrink-0 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-colors text-center"
+          >
+            Host a Workshop
+          </Link>
+        </div>
+
         {/* Filter tabs */}
         <div className="flex items-center gap-2 mb-10 flex-wrap">
           {[null, ...eventTypes].map((t) => (

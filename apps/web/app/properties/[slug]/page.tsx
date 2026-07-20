@@ -3,11 +3,13 @@ import { type Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { prisma } from '@crib/db'
+import { truncate } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
 import { PropertyBookingPanel } from '@/components/property/PropertyBookingPanel'
 import { LucideIcon } from '@/components/location/LucideIcon'
 import { Footer } from '@/components/home/Footer'
 import { FAQSection } from '@/components/home/FAQSection'
+import { JsonLd } from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,9 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!property) return { title: 'Property Not Found' }
   return {
     title: property.name,
-    description:
-      property.description ??
-      `Book your stay at ${property.name} in ${property.location.city}, ${property.location.country}.`,
+    description: property.description
+      ? truncate(property.description, 155)
+      : `Book your stay at ${property.name} in ${property.location.city}, ${property.location.country}.`,
   }
 }
 
@@ -84,9 +86,46 @@ export default async function PropertyPage({ params }: Props) {
   }))
 
   const lowestPrice = roomTypes[0]?.price_per_night ?? 0
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const uniqueAmenities = Array.from(new Set(roomTypes.flatMap((rt) => rt.amenities.map((a) => a.name))))
+
+  const lodgingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name: property.name,
+    description: property.description ?? undefined,
+    url: `${appUrl}/properties/${property.slug}`,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: property.address,
+      addressLocality: property.location.city,
+      addressRegion: property.location.state,
+      addressCountry: property.location.country,
+    },
+    checkinTime: property.check_in_time ?? undefined,
+    checkoutTime: property.check_out_time ?? undefined,
+    amenityFeature: uniqueAmenities.map((name) => ({
+      '@type': 'LocationFeatureSpecification',
+      name,
+      value: true,
+    })),
+    priceRange: lowestPrice > 0 ? `₹${lowestPrice.toLocaleString('en-IN')}+` : undefined,
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Locations', item: `${appUrl}/locations` },
+      { '@type': 'ListItem', position: 2, name: property.location.name, item: `${appUrl}/locations/${property.location.slug}` },
+      { '@type': 'ListItem', position: 3, name: property.name, item: `${appUrl}/properties/${property.slug}` },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-background-dark">
+      <JsonLd data={lodgingSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <NavBar />
 
       {/* Hero */}

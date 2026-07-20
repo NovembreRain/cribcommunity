@@ -8,6 +8,7 @@ import { NavBar } from '@/components/home/NavBar'
 import { LucideIcon } from '@/components/location/LucideIcon'
 import { registerForEvent } from './actions'
 import { Footer } from '@/components/home/Footer'
+import { JsonLd } from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,7 +24,7 @@ export async function generateMetadata({
   })
   if (!event) return {}
   return {
-    title: `${event.name} — Crib Community`,
+    title: event.name,
     description: event.description ?? undefined,
   }
 }
@@ -49,9 +50,39 @@ export default async function EventDetailPage({
   const isPast = event.start_datetime < new Date()
   const images = Array.isArray(event.images) ? (event.images as string[]) : []
   const coverImage = images[0] ?? null
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  const eventSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.name,
+    description: event.description ?? undefined,
+    startDate: event.start_datetime.toISOString(),
+    endDate: event.end_datetime.toISOString(),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    image: coverImage ?? undefined,
+    location: {
+      '@type': 'Place',
+      name: event.location.name,
+      address: { '@type': 'PostalAddress', addressLocality: event.location.city, addressRegion: event.location.state },
+    },
+    organizer: { '@type': 'Organization', name: 'Crib Community', url: appUrl },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Events', item: `${appUrl}/community/events` },
+      { '@type': 'ListItem', position: 2, name: event.name, item: `${appUrl}/community/events/${event.slug}` },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-background-dark">
+      <JsonLd data={eventSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <NavBar />
 
       {/* Hero banner — full-bleed with overlay */}

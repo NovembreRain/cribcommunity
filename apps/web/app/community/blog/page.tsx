@@ -8,8 +8,8 @@ import { SectionShell } from '@/components/home/SectionShell'
 import { Footer } from '@/components/home/Footer'
 
 export const metadata: Metadata = {
-  title: 'Journal — Crib Community',
-  description: 'Stories, guides, and perspectives from life on the road.',
+  title: 'Journal',
+  description: 'Travel guides and stories from Crib Community — things to do in Auroville and Pondicherry, hostel life, and the people who make it home.',
 }
 export const dynamic = 'force-dynamic'
 
@@ -40,7 +40,8 @@ export default async function BlogPage({
       <SectionShell
         eyebrow="The Journal"
         title="Stories from the Road"
-        description="Guides, perspectives, and tales from Crib travellers and staff."
+        titleAs="h1"
+        description="Travel guides, perspectives, and tales from Crib Community's Auroville hostels and the travellers who pass through."
         className="bg-background-dark pt-0"
       >
         {/* Category filter */}

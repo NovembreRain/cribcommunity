@@ -1,3 +1,4 @@
+import { type Metadata } from 'next'
 import { prisma } from '@crib/db'
 import { truncate, formatDateTime, formatDate } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
@@ -10,6 +11,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Boutique Hostels & Homestays in Auroville | Crib Community',
+  description:
+    'Curated budget hostels in Auroville — garden-view rooms, shared kitchens, real community. Book Travellers Crib or Purity Stays instantly.',
+}
 
 export default async function HomePage() {
   const [locations, events, posts, testimonials] = await Promise.all([

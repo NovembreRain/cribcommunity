@@ -46,6 +46,8 @@ export async function createBlogPost(formData: FormData) {
   const author_id = formData.get('author_id') as string
   const status = formData.get('status') as string
   const og_image = (formData.get('og_image') as string) || null
+  const meta_title = (formData.get('meta_title') as string) || null
+  const meta_description = (formData.get('meta_description') as string) || null
 
   await prisma.blogPost.create({
     data: {
@@ -58,6 +60,8 @@ export async function createBlogPost(formData: FormData) {
       author_id,
       status,
       og_image,
+      meta_title,
+      meta_description,
       published_at: status === 'published' ? new Date() : null,
     },
   })
@@ -72,6 +76,8 @@ export async function updateBlogPost(id: string, formData: FormData) {
   const category_id = formData.get('category_id') as string
   const status = formData.get('status') as string
   const og_image = (formData.get('og_image') as string) || null
+  const meta_title = (formData.get('meta_title') as string) || null
+  const meta_description = (formData.get('meta_description') as string) || null
 
   const existing = await prisma.blogPost.findUnique({ where: { id }, select: { status: true, published_at: true } })
   const wasPublished = existing?.status === 'published'
@@ -87,6 +93,8 @@ export async function updateBlogPost(id: string, formData: FormData) {
       category_id,
       status,
       og_image,
+      meta_title,
+      meta_description,
       published_at: isPublishing && !wasPublished ? new Date() : (isPublishing ? existing?.published_at : null),
     },
   })

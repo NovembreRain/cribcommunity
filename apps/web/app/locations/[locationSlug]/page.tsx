@@ -8,6 +8,7 @@ import { PropertyCard } from '@/components/location/PropertyCard'
 import { LocationGallery } from '@/components/location/LocationGallery'
 import { Footer } from '@/components/home/Footer'
 import { FAQSection } from '@/components/home/FAQSection'
+import { JsonLd } from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,10 +24,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   })
   if (!location) return { title: 'Location Not Found' }
   return {
-    title: location.name,
-    description:
-      location.description ??
-      `Explore hostels and experiences in ${location.city}, ${location.country}.`,
+    title: `${location.name} Hostels`,
+    description: location.description
+      ? truncate(location.description, 155)
+      : `Explore hostels and experiences in ${location.city}, ${location.country}.`,
   }
 }
 
@@ -100,9 +101,20 @@ export default async function LocationDetailPage({ params }: Props) {
 
   const heroImage = propertyCards[0]?.image ?? null
   const galleryImages = Array.isArray(location.images) ? (location.images as string[]) : []
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Locations', item: `${appUrl}/locations` },
+      { '@type': 'ListItem', position: 2, name: location.name, item: `${appUrl}/locations/${location.slug}` },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-background-dark">
+      <JsonLd data={breadcrumbSchema} />
       <NavBar />
 
       {/* Hero banner */}

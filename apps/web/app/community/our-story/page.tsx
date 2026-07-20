@@ -5,8 +5,8 @@ import { SectionShell } from '@/components/home/SectionShell'
 import { Footer } from '@/components/home/Footer'
 
 export const metadata: Metadata = {
-  title: 'Our Story — Crib Community',
-  description: 'How Crib Community came to be — the journey from a single hostel to a movement.',
+  title: 'Our Story',
+  description: 'How Crib Community grew from one Auroville hostel into a small collective built on community, warmth, and good stories.',
 }
 export const dynamic = 'force-dynamic'
 
@@ -23,7 +23,8 @@ export default async function OurStoryPage() {
       <SectionShell
         eyebrow="About Us"
         title="Our Story"
-        description="From a single room in Goa to a community of travellers across India — this is how it all started."
+        titleAs="h1"
+        description="From a single room in Auroville to a community of travellers finding home on the road — this is how it all started."
         className="bg-background-dark pt-0"
       >
         {timeline.length === 0 ? (

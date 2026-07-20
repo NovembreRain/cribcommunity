@@ -9,8 +9,8 @@ import { Footer } from '@/components/home/Footer'
 import { FAQSection } from '@/components/home/FAQSection'
 
 export const metadata: Metadata = {
-  title: 'Careers — Crib Community',
-  description: 'Work where others come to escape. Join the Crib Community team.',
+  title: 'Careers',
+  description: 'Join the Crib Community team in Auroville — hostel management and hospitality roles for people who love travellers and good community.',
 }
 export const dynamic = 'force-dynamic'
 
@@ -36,7 +36,8 @@ export default async function JobsPage() {
       <SectionShell
         eyebrow="Join Us"
         title="Work at Crib"
-        description="Help build the community. Open roles across all our locations."
+        titleAs="h1"
+        description="Help build the community. Open roles at our Auroville hostels."
         className="bg-background-dark pt-0"
       >
         {jobs.length === 0 ? (

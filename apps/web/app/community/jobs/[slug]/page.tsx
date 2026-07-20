@@ -2,11 +2,12 @@ import { type Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { prisma } from '@crib/db'
-import { formatDate } from '@crib/lib'
+import { formatDate, truncate } from '@crib/lib'
 import { NavBar } from '@/components/home/NavBar'
 import { MapPin, Banknote, ChevronRight } from 'lucide-react'
 import { applyForJob } from './actions'
 import { Footer } from '@/components/home/Footer'
+import { JsonLd } from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,9 +17,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const job = await prisma.job.findUnique({ where: { slug }, select: { title: true } })
+  const job = await prisma.job.findUnique({ where: { slug }, select: { title: true, description: true, location: true } })
   if (!job) return {}
-  return { title: `${job.title} — Crib Community` }
+  return {
+    title: job.title,
+    description: `${job.title} at Crib Community, ${job.location} — ${truncate(job.description, 120)}`,
+  }
 }
 
 export default async function JobDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,9 +31,25 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
   if (!job) notFound()
 
   const isExpired = job.valid_through && job.valid_through < new Date()
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  const jobPostingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: job.title,
+    description: job.description,
+    datePosted: job.created_at.toISOString(),
+    validThrough: job.valid_through?.toISOString(),
+    hiringOrganization: { '@type': 'Organization', name: 'Crib Community', sameAs: appUrl },
+    jobLocation: {
+      '@type': 'Place',
+      address: { '@type': 'PostalAddress', addressLocality: job.location, addressCountry: 'IN' },
+    },
+  }
 
   return (
     <main className="min-h-screen bg-background-dark">
+      <JsonLd data={jobPostingSchema} />
       <NavBar />
       <div className="pt-32" />
 

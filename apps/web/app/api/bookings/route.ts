@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@crib/db'
 import { checkRoomAvailability, parseDate } from '@/lib/availability'
+import { sendBookingAlertEmail } from '@/lib/notifications'
 
 const bookingSchema = z.object({
   property_id: z.string().min(1),
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
   // Verify room_type belongs to property
   const roomType = await prisma.roomType.findFirst({
     where: { id: room_type_id, property_id },
-    select: { id: true, price_per_night: true },
+    select: { id: true, name: true, price_per_night: true, property: { select: { name: true } } },
   })
 
   if (!roomType) {
@@ -146,6 +147,18 @@ export async function POST(req: NextRequest) {
     }
     throw err
   }
+
+  await sendBookingAlertEmail({
+    bookingId: booking.id,
+    guestName: guest_name,
+    guestEmail: guest_email,
+    guestPhone: guest_phone,
+    propertyName: roomType.property.name,
+    roomTypeName: roomType.name,
+    checkInDate: booking.check_in_date.toISOString().split('T')[0]!,
+    checkOutDate: booking.check_out_date.toISOString().split('T')[0]!,
+    totalAmount: booking.total_amount,
+  })
 
   return NextResponse.json(
     {

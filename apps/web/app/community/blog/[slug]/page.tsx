@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { NavBar } from '@/components/home/NavBar'
 import { ChevronRight } from 'lucide-react'
 import { Footer } from '@/components/home/Footer'
+import { JsonLd } from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,12 +19,13 @@ export async function generateMetadata({
   const { slug } = await params
   const post = await prisma.blogPost.findUnique({
     where: { slug, status: 'published' },
-    select: { title: true, meta_description: true, excerpt: true },
+    select: { title: true, meta_title: true, meta_description: true, excerpt: true, og_image: true },
   })
   if (!post) return {}
   return {
-    title: `${post.title} — Crib Community`,
+    title: post.meta_title || post.title,
     description: post.meta_description ?? post.excerpt ?? undefined,
+    openGraph: post.og_image ? { images: [{ url: post.og_image }] } : undefined,
   }
 }
 
@@ -35,8 +37,33 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   })
   if (!post) notFound()
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.meta_description ?? post.excerpt ?? undefined,
+    image: post.og_image ?? undefined,
+    datePublished: post.published_at?.toISOString(),
+    author: { '@type': 'Organization', name: 'Crib Community' },
+    publisher: { '@type': 'Organization', name: 'Crib Community' },
+    mainEntityOfPage: `${appUrl}/community/blog/${post.slug}`,
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Journal', item: `${appUrl}/community/blog` },
+      { '@type': 'ListItem', position: 2, name: post.title, item: `${appUrl}/community/blog/${post.slug}` },
+    ],
+  }
+
   return (
     <main className="min-h-screen bg-background-dark">
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <NavBar />
       <div className="pt-32" />
 
@@ -75,6 +102,19 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           {post.content.split('\n\n').map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
+        </div>
+
+        {/* Events CTA */}
+        <div className="glass-panel rounded-2xl border border-gold-border/15 p-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <p className="text-text-medium text-sm">
+            Movie nights, workshops, music circles — see what&apos;s on at Crib Community.
+          </p>
+          <Link
+            href="/community/events"
+            className="shrink-0 bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-colors text-center"
+          >
+            Check Events
+          </Link>
         </div>
       </article>
 

@@ -48,6 +48,12 @@ export default async function EditBlogPostPage({ params }: { params: Promise<{ i
         <Field label="Excerpt" name="excerpt" textarea defaultValue={post.excerpt ?? ''} />
         <Field label="Content *" name="content" textarea defaultValue={post.content} rows={12} />
 
+        <div className="grid grid-cols-1 gap-4 border-t border-gold-border/10 pt-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-text-low font-bold">SEO</p>
+          <Field label="Meta Title" name="meta_title" defaultValue={post.meta_title ?? ''} placeholder="Falls back to the post title if left blank" />
+          <Field label="Meta Description" name="meta_description" textarea defaultValue={post.meta_description ?? ''} rows={2} placeholder="~150-160 characters shown in search results" />
+        </div>
+
         <div className="space-y-1.5">
           <label htmlFor="category_id" className="text-xs text-text-low uppercase tracking-[0.1em] font-medium">
             Category *
@@ -81,9 +87,9 @@ export default async function EditBlogPostPage({ params }: { params: Promise<{ i
 }
 
 function Field({
-  label, name, defaultValue, textarea, rows,
+  label, name, defaultValue, textarea, rows, placeholder,
 }: {
-  label: string; name: string; defaultValue?: string; textarea?: boolean; rows?: number
+  label: string; name: string; defaultValue?: string; textarea?: boolean; rows?: number; placeholder?: string
 }) {
   const base =
     'w-full bg-surface-dark border border-gold-border/20 rounded-xl px-4 py-2.5 text-sm text-text-high placeholder:text-text-low focus:outline-none focus:border-primary/40 transition-colors'
@@ -91,9 +97,9 @@ function Field({
     <div className="space-y-1.5">
       <label htmlFor={name} className="text-xs text-text-low uppercase tracking-[0.1em] font-medium">{label}</label>
       {textarea ? (
-        <textarea id={name} name={name} defaultValue={defaultValue ?? ''} rows={rows ?? 4} className={base} />
+        <textarea id={name} name={name} defaultValue={defaultValue ?? ''} rows={rows ?? 4} placeholder={placeholder} className={base} />
       ) : (
-        <input id={name} name={name} defaultValue={defaultValue ?? ''} className={base} />
+        <input id={name} name={name} defaultValue={defaultValue ?? ''} placeholder={placeholder} className={base} />
       )}
     </div>
   )
